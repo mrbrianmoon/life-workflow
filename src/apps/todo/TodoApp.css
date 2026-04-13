@@ -1,0 +1,62 @@
+/* ── To Do Placeholder ─────────────────────────────── */
+
+.todo-placeholder {
+  padding-top: 20px;
+}
+
+.todo-placeholder h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.8rem;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+}
+
+.placeholder-msg {
+  color: #555c63;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.placeholder-msg code {
+  background: #dde0e3;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.migration-checklist {
+  margin-top: 32px;
+  background: #cdd0d4;
+  border: 1px solid #9fa5ab;
+  border-radius: 10px;
+  padding: 20px 24px;
+}
+
+.migration-checklist h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.migration-checklist ul {
+  list-style: none;
+  padding: 0;
+}
+
+.migration-checklist li {
+  padding: 6px 0;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+}
+
+.migration-checklist li.pending::before {
+  content: '○ ';
+  color: #9fa5ab;
+}
+
+.migration-checklist li.done::before {
+  content: '● ';
+  color: #3a6b4a;
+}

@@ -1,0 +1,584 @@
+/* ── Lawn Care App ─────────────────────────────────── */
+
+.lawn-care {
+  padding-top: 20px;
+}
+
+.lawn-care h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.8rem;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.lawn-subtitle {
+  font-size: 0.85rem;
+  color: #555c63;
+  margin-bottom: 28px;
+}
+
+.loading-msg {
+  color: #555c63;
+  font-size: 0.9rem;
+}
+
+/* ── Auth Notice ───────────────────────────────────── */
+
+.auth-notice {
+  margin-top: 24px;
+  padding: 20px;
+  background: #cdd0d4;
+  border: 1px solid #9fa5ab;
+  border-radius: 10px;
+}
+
+.auth-notice p { color: #1a1a1a; font-size: 0.95rem; }
+.auth-hint { color: #555c63; font-size: 0.85rem; margin-top: 8px; }
+
+/* ── Zone Manager ──────────────────────────────────── */
+
+.zone-manager {
+  margin-bottom: 32px;
+  background: #cdd0d4;
+  border: 1px solid #9fa5ab;
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+
+.zone-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.zone-header h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.zone-add-btn {
+  background: #2e3236;
+  color: #e8e4dc;
+  border: none;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.zone-add-btn:hover { background: #444a50; }
+
+.zone-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 12px;
+  background: #b8bcc0;
+  border-radius: 8px;
+}
+
+.zone-form input,
+.zone-form select {
+  padding: 8px 12px;
+  border: 1.5px solid #9fa5ab;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+  background: #cdd0d4;
+  outline: none;
+}
+
+.zone-form input:focus,
+.zone-form select:focus { border-color: #2e3236; }
+
+.zone-save-btn {
+  padding: 8px 16px;
+  background: #2e3236;
+  color: #e8e4dc;
+  border: none;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.zone-save-btn:hover { background: #444a50; }
+.zone-save-btn:disabled { background: #888; cursor: not-allowed; }
+
+.zone-empty {
+  color: #555c63;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.zone-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.zone-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: #b8bcc0;
+  border-radius: 8px;
+}
+
+.zone-info { display: flex; flex-direction: column; gap: 2px; }
+.zone-name { font-weight: 600; font-size: 0.9rem; }
+.zone-details { font-size: 0.78rem; color: #555c63; }
+
+.zone-delete-btn {
+  background: none;
+  border: none;
+  color: #9fa5ab;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.zone-delete-btn:hover {
+  color: #b5432a;
+  background: rgba(224, 90, 43, 0.1);
+}
+
+/* ── Seasonal Schedule ─────────────────────────────── */
+
+.seasonal-schedule {
+  margin-top: 8px;
+}
+
+.schedule-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.schedule-top-bar h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.schedule-year {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.schedule-year button {
+  background: #2e3236;
+  color: #e8e4dc;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.schedule-year button:hover { background: #444a50; }
+.schedule-year span { font-weight: 600; font-size: 0.95rem; }
+
+/* ── Year Progress ─────────────────────────────────── */
+
+.year-progress {
+  margin-bottom: 16px;
+}
+
+.progress-track {
+  height: 6px;
+  background: #9fa5ab;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #3a6b4a;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+.progress-text {
+  font-size: 0.78rem;
+  color: #555c63;
+  display: block;
+  text-align: right;
+  margin-top: 4px;
+}
+
+/* ── Template Prompt ───────────────────────────────── */
+
+.template-prompt {
+  text-align: center;
+  padding: 28px 20px;
+  background: #c8d8c5;
+  border: 1px solid #8aab85;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.template-prompt p {
+  font-size: 0.95rem;
+  color: #2a5a2e;
+  margin-bottom: 12px;
+}
+
+.template-btn {
+  padding: 10px 24px;
+  background: #2a5a2e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.template-btn:hover { background: #1e4522; }
+
+.template-btn-small {
+  display: block;
+  margin: 16px auto 0;
+  padding: 6px 16px;
+  background: transparent;
+  color: #555c63;
+  border: 1px solid #9fa5ab;
+  border-radius: 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.template-btn-small:hover {
+  background: #cdd0d4;
+  color: #1a1a1a;
+}
+
+/* ── Month Selector ────────────────────────────────── */
+
+.month-selector {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.month-pill {
+  padding: 6px 10px;
+  border: 1px solid #9fa5ab;
+  border-radius: 20px;
+  background: transparent;
+  color: #555c63;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.month-pill:hover {
+  background: #cdd0d4;
+  color: #1a1a1a;
+}
+
+.month-pill.active {
+  background: #2e3236;
+  color: #e8e4dc;
+  border-color: #2e3236;
+}
+
+.month-pill.current {
+  border-color: #3a6b4a;
+}
+
+.month-pill.all-done {
+  color: #3a6b4a;
+}
+
+.month-pill.empty {
+  opacity: 0.5;
+}
+
+/* ── Month Header ──────────────────────────────────── */
+
+.month-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.month-header h4 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.3rem;
+}
+
+.month-progress {
+  font-size: 0.78rem;
+  color: #3a6b4a;
+  font-weight: 600;
+}
+
+.month-empty {
+  text-align: center;
+  padding: 24px;
+  color: #555c63;
+  font-size: 0.9rem;
+  border: 1.5px dashed #9fa5ab;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+
+/* ── Schedule Item ─────────────────────────────────── */
+
+.schedule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: #cdd0d4;
+  border: 1px solid #9fa5ab;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  transition: border-color 0.2s;
+}
+
+.schedule-item:hover { border-color: #888; }
+.schedule-item:hover .schedule-delete { opacity: 1; }
+
+.schedule-item.done {
+  background: #c2ccc5;
+  border-color: #bcd5c6;
+}
+
+.schedule-item.done .schedule-title {
+  text-decoration: line-through;
+  color: #555c63;
+}
+
+/* ── Checkbox ──────────────────────────────────────── */
+
+.schedule-checkbox {
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.schedule-cb-box {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #9fa5ab;
+  border-radius: 5px;
+  background: #cdd0d4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.schedule-checkbox.checked .schedule-cb-box {
+  background: #3a6b4a;
+  border-color: #3a6b4a;
+}
+
+/* ── Item Body ─────────────────────────────────────── */
+
+.schedule-body { flex: 1; }
+
+.schedule-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.schedule-cat-icon {
+  font-size: 0.85rem;
+}
+
+.template-badge,
+.zone-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1px 7px;
+  border-radius: 20px;
+}
+
+.template-badge {
+  background: #2e3236;
+  color: #e8e4dc;
+}
+
+.zone-badge {
+  background: #b0cce8;
+  color: #2a5e8a;
+}
+
+.schedule-desc {
+  font-size: 0.82rem;
+  color: #555c63;
+  margin-top: 4px;
+  line-height: 1.45;
+}
+
+.schedule-done-date {
+  font-size: 0.75rem;
+  color: #3a6b4a;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+.schedule-delete {
+  opacity: 0;
+  background: none;
+  border: none;
+  color: #9fa5ab;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: opacity 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+
+.schedule-delete:hover {
+  color: #b5432a;
+  background: rgba(224, 90, 43, 0.1);
+}
+
+/* ── Completed Divider ─────────────────────────────── */
+
+.completed-divider {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #555c63;
+  margin: 16px 0 8px 4px;
+  padding-top: 12px;
+  border-top: 1px solid #9fa5ab;
+}
+
+/* ── Add Item ──────────────────────────────────────── */
+
+.add-item-section {
+  margin-top: 16px;
+}
+
+.add-item-btn {
+  width: 100%;
+  padding: 10px;
+  border: 1.5px dashed #9fa5ab;
+  border-radius: 10px;
+  background: transparent;
+  color: #555c63;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.add-item-btn:hover {
+  background: #cdd0d4;
+  color: #1a1a1a;
+}
+
+.add-item-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  background: #cdd0d4;
+  border: 1px solid #9fa5ab;
+  border-radius: 10px;
+}
+
+.add-item-form input,
+.add-item-form textarea,
+.add-item-form select {
+  padding: 8px 12px;
+  border: 1.5px solid #9fa5ab;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+  background: #b8bcc0;
+  outline: none;
+  resize: vertical;
+}
+
+.add-item-form input:focus,
+.add-item-form textarea:focus,
+.add-item-form select:focus { border-color: #2e3236; }
+
+.add-item-row {
+  display: flex;
+  gap: 8px;
+}
+
+.add-item-row select { flex: 1; }
+
+.add-item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.add-item-actions button {
+  padding: 8px 16px;
+  border: 1px solid #9fa5ab;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  background: transparent;
+  color: #555c63;
+  transition: background 0.2s;
+}
+
+.add-item-actions button:hover { background: #b8bcc0; }
+
+.add-item-actions .save-btn {
+  background: #2e3236;
+  color: #e8e4dc;
+  border-color: #2e3236;
+}
+
+.add-item-actions .save-btn:hover { background: #444a50; }
+.add-item-actions .save-btn:disabled { background: #888; cursor: not-allowed; }
+
+/* ── Mobile ────────────────────────────────────────── */
+
+@media (max-width: 500px) {
+  .month-selector { gap: 3px; }
+  .month-pill { padding: 5px 7px; font-size: 0.7rem; }
+  .add-item-row { flex-direction: column; }
+}

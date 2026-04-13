@@ -1,0 +1,19 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from './shared/Layout';
+import Home from './pages/Home';
+import TodoApp from './apps/todo/TodoApp';
+import LawnCareApp from './apps/lawn-care/LawnCareApp';
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="todo" element={<TodoApp />} />
+          <Route path="lawn-care" element={<LawnCareApp />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
