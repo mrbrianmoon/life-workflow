@@ -1,0 +1,14 @@
+.label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #555c63;
+    margin: 18px 0 4px 4px;
+  }
+  
+  .completedLabel {
+    margin-top: 28px;
+    padding-top: 14px;
+    border-top: 1px solid #9fa5ab;
+  }

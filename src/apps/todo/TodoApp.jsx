@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useTasks, formatShortDate } from './useTasks.js';
+import { usePersonalSections } from './usePersonalSections.js';
+import { buildRenderPlan } from './buildRenderPlan.js';
 import TabBar from './TabBar.jsx';
 import DateNav from './DateNav.jsx';
 import TaskCard from './TaskCard.jsx';
+import SectionLabel from './SectionLabel.jsx';
 
 function getToday() {
   const d = new Date();
@@ -10,23 +13,9 @@ function getToday() {
   return d;
 }
 
-function filterTasks(tasks, activeTab, selectedDate) {
-  const currentDateStr = formatShortDate(selectedDate);
-
-  return tasks.filter(function(row) {
-    const taskTab = row.tab || 'work';
-    if (taskTab !== activeTab) return false;
-    if (activeTab === 'work') {
-      if (row.category === 'Ongoing') return true;
-      const taskDate = row.display_date || row.origin_date;
-      return taskDate === currentDateStr;
-    }
-    return true;
-  });
-}
-
 export default function TodoApp() {
-  const { tasks, loading, error } = useTasks();
+  const { tasks, loading: tasksLoading, error } = useTasks();
+  const { sections, loading: sectionsLoading } = usePersonalSections();
   const [activeTab, setActiveTab] = useState('work');
   const [selectedDate, setSelectedDate] = useState(getToday());
 
@@ -38,15 +27,15 @@ export default function TodoApp() {
     });
   }
 
-  if (loading) {
-    return <p style={{ padding: '40px' }}>Loading tasks...</p>;
+  if (tasksLoading || sectionsLoading) {
+    return <p style={{ padding: '40px' }}>Loading...</p>;
   }
 
   if (error) {
     return <p style={{ padding: '40px', color: 'red' }}>Error: {error}</p>;
   }
 
-  const visible = filterTasks(tasks, activeTab, selectedDate);
+  const plan = buildRenderPlan(tasks, activeTab, selectedDate, sections, formatShortDate);
 
   return (
     <div style={{ maxWidth: '640px', margin: '0 auto', padding: '40px 24px' }}>
@@ -60,7 +49,7 @@ export default function TodoApp() {
         {activeTab === 'work' ? 'Work' : 'Personal'}
       </h2>
 
-      {visible.length === 0 && (
+      {plan.length === 0 && (
         <div style={{
           textAlign: 'center', color: '#555c63', padding: '40px 20px',
           border: '1.5px dashed #9fa5ab', borderRadius: '16px'
@@ -70,8 +59,11 @@ export default function TodoApp() {
         </div>
       )}
 
-      {visible.map(function(task) {
-        return <TaskCard key={task.id} task={task} />;
+      {plan.map(function(item) {
+        if (item.type === 'label') {
+          return <SectionLabel key={item.key} text={item.text} completed={item.completed} />;
+        }
+        return <TaskCard key={item.key} task={item.row} />;
       })}
     </div>
   );
