@@ -1,0 +1,52 @@
+.dateRow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #2e3236;
+    color: #e8e4dc;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 99px;
+  }
+  
+  .navPill {
+    display: inline-flex;
+    align-items: stretch;
+    background: #2e3236;
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  
+  .navBtn {
+    background: transparent;
+    color: #e8e4dc;
+    border: none;
+    width: 26px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 0;
+    transition: background 0.15s;
+  }
+  
+  .navBtn:hover {
+    background: #444a50;
+  }
+  
+  .divider {
+    width: 1px;
+    background: #4a5058;
+    margin: 4px 0;
+  }

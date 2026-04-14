@@ -1,0 +1,32 @@
+.tabBar {
+    max-width: 640px;
+    margin: 0 auto 24px;
+    display: flex;
+    border-bottom: 2px solid #9fa5ab;
+  }
+  
+  .tabBtn {
+    flex: 1;
+    padding: 10px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #555c63;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    letter-spacing: 0.02em;
+    text-align: center;
+  }
+  
+  .tabBtn:hover {
+    color: #1a1a1a;
+  }
+  
+  .active {
+    color: #1a1a1a;
+    border-bottom-color: #2e3236;
+  }
