@@ -1,28 +1,28 @@
-import './TodoApp.css';
+import { useTasks } from './useTasks.js';
 
 export default function TodoApp() {
+  const { tasks, loading, error } = useTasks();
+
+  if (loading) {
+    return <p style={{ padding: '40px' }}>Loading tasks...</p>;
+  }
+
+  if (error) {
+    return <p style={{ padding: '40px', color: 'red' }}>Error: {error}</p>;
+  }
+
   return (
-    <div className="todo-placeholder">
-      <h1>To Do Workstream</h1>
-      <p className="placeholder-msg">
-        This app is being migrated from the standalone <code>index.html</code> version.
-      </p>
-      <p className="placeholder-msg">
-        Your existing To Do app is still live at its current GitHub Pages URL — 
-        use that for daily tasks while this React version is built out.
-      </p>
-      <div className="migration-checklist">
-        <h3>Migration Checklist</h3>
-        <ul>
-          <li className="pending">Supabase connection + data layer</li>
-          <li className="pending">Task rendering (TaskCard component)</li>
-          <li className="pending">Work / Personal tab switching</li>
-          <li className="pending">Priority grouping + sections</li>
-          <li className="pending">Drag and drop reordering</li>
-          <li className="pending">Rich note editor</li>
-          <li className="pending">Real-time sync</li>
-        </ul>
-      </div>
+    <div style={{ padding: '40px' }}>
+      <h2>To Do ({tasks.length} tasks)</h2>
+      <ul>
+        {tasks.map(function(task) {
+          return (
+            <li key={task.id}>
+              {task.name} — {task.tab} / {task.category}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
