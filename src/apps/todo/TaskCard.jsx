@@ -19,15 +19,9 @@ function parseNote(raw) {
       indent = Math.min(2, Math.floor(spaceMatch[1].length / 2));
       rest = rest.slice(spaceMatch[1].length);
     }
-    if (rest.startsWith('- ')) {
-      return { type: 'bullet', text: rest.slice(2), indent };
-    }
-    if (rest.startsWith('[ ] ')) {
-      return { type: 'checkbox', checked: false, text: rest.slice(4), indent };
-    }
-    if (rest.startsWith('[x] ') || rest.startsWith('[X] ')) {
-      return { type: 'checkbox', checked: true, text: rest.slice(4), indent };
-    }
+    if (rest.startsWith('- ')) return { type: 'bullet', text: rest.slice(2), indent };
+    if (rest.startsWith('[ ] ')) return { type: 'checkbox', checked: false, text: rest.slice(4), indent };
+    if (rest.startsWith('[x] ') || rest.startsWith('[X] ')) return { type: 'checkbox', checked: true, text: rest.slice(4), indent };
     return { type: 'plain', text: rest, indent };
   });
 }
@@ -39,12 +33,7 @@ function NoteDisplay({ note }) {
   return (
     <div className={styles.noteSub}>
       {lines.map(function(line, i) {
-        const indentClass = line.indent === 1
-          ? styles.indent1
-          : line.indent === 2
-          ? styles.indent2
-          : '';
-
+        const indentClass = line.indent === 1 ? styles.indent1 : line.indent === 2 ? styles.indent2 : '';
         if (line.type === 'bullet') {
           return (
             <div key={i} className={`${styles.noteLine} ${styles.noteBullet} ${indentClass}`}>
@@ -72,12 +61,15 @@ function NoteDisplay({ note }) {
   );
 }
 
-export default function TaskCard({ task }) {
+export default function TaskCard({ task, onToggle, onEdit, onDelete }) {
   const fwdCount = task.fwd_count || 0;
 
   return (
     <div className={`${styles.task} ${task.done ? styles.done : ''}`}>
-      <div className={`${styles.checkbox} ${task.done ? styles.checkboxDone : ''}`}>
+      <div
+        className={`${styles.checkbox} ${task.done ? styles.checkboxDone : ''}`}
+        onClick={function() { onToggle(task.id); }}
+      >
         {task.done && (
           <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
             <path d="M1 5L4.5 8.5L11 1" stroke="white" strokeWidth="2"
@@ -97,6 +89,15 @@ export default function TaskCard({ task }) {
           Added {task.origin_date || ''}
           {task.completed_date ? ` · Completed ${task.completed_date}` : ''}
         </div>
+      </div>
+      <div className={styles.taskActions}>
+        <button className={styles.editBtn} onClick={function() { onEdit(task); }} title="Edit">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"
+               strokeLinecap="round" strokeLinejoin="round">
+            <path d="M11.5 1.5l3 3L5 14H2v-3L11.5 1.5z"/>
+          </svg>
+        </button>
+        <button className={styles.deleteBtn} onClick={function() { onDelete(task.id); }} title="Remove">✕</button>
       </div>
     </div>
   );

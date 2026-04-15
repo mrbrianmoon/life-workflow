@@ -1,117 +1,167 @@
 .task {
-    background: #cdd0d4;
-    border: 1.5px solid #9fa5ab;
-    border-radius: 12px;
-    padding: 14px 14px 14px 18px;
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    margin-bottom: 10px;
-    transition: border-color 0.2s, background 0.2s;
-  }
-  
-  .done {
-    background: #c2ccc5;
-    border-color: #bcd5c6;
-  }
-  
-  .checkbox {
-    width: 22px;
-    height: 22px;
-    border-radius: 6px;
-    border: 2px solid #9fa5ab;
-    background: #cdd0d4;
-    flex-shrink: 0;
-    margin-top: 1px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-  
-  .checkboxDone {
-    background: #3a6b4a;
-    border-color: #3a6b4a;
-  }
-  
-  .taskBody {
-    flex: 1;
-  }
-  
-  .taskTitle {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: #1a1a1a;
-  }
-  
-  .taskTitleDone {
-    text-decoration: line-through;
-    color: #555c63;
-  }
-  
-  .fwdBadge {
-    display: inline-block;
-    font-size: 0.65rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    background: #2e3236;
-    color: #e8e4dc;
-    padding: 1px 7px;
-    border-radius: 99px;
-    margin-left: 8px;
-    vertical-align: middle;
-  }
-  
-  .taskMeta {
-    font-size: 0.72rem;
-    color: #555c63;
-    margin-top: 4px;
-    font-weight: 300;
-    font-style: italic;
-    opacity: 0.75;
-  }
-  
-  .noteSub {
-    font-size: 0.9rem;
-    color: #1a1a1a;
-    margin-top: 3px;
-    font-weight: 300;
-  }
-  
-  .noteLine {
-    display: flex;
-    align-items: flex-start;
-    gap: 6px;
-    line-height: 1.5;
-    margin: 1px 0;
-  }
-  
-  .noteBullet::before {
-    content: '•';
-    flex-shrink: 0;
-    color: #555c63;
-  }
-  
-  .noteCb {
-    flex-shrink: 0;
-    width: 14px;
-    height: 14px;
-    border: 1.5px solid #9fa5ab;
-    border-radius: 3px;
-    background: transparent;
-    margin-top: 3px;
-  }
-  
-  .noteCbChecked {
-    background: #3a6b4a;
-    border-color: #3a6b4a;
-  }
-  
-  .noteCbTextChecked {
-    text-decoration: line-through;
-    color: #555c63;
-  }
-  
-  .indent1 { padding-left: 16px; }
-  .indent2 { padding-left: 32px; }
+  background: #cdd0d4;
+  border: 1.5px solid #9fa5ab;
+  border-radius: 12px;
+  padding: 14px 14px 14px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 10px;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+}
+
+.task:hover .editBtn,
+.task:hover .deleteBtn {
+  opacity: 1;
+}
+
+.done {
+  background: #c2ccc5;
+  border-color: #bcd5c6;
+}
+
+.checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid #9fa5ab;
+  background: #cdd0d4;
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.checkboxDone {
+  background: #3a6b4a;
+  border-color: #3a6b4a;
+}
+
+.taskBody {
+  flex: 1;
+}
+
+.taskTitle {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.taskTitleDone {
+  text-decoration: line-through;
+  color: #555c63;
+}
+
+.fwdBadge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  background: #2e3236;
+  color: #e8e4dc;
+  padding: 1px 7px;
+  border-radius: 99px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.taskMeta {
+  font-size: 0.72rem;
+  color: #555c63;
+  margin-top: 4px;
+  font-weight: 300;
+  font-style: italic;
+  opacity: 0.75;
+}
+
+.noteSub {
+  font-size: 0.9rem;
+  color: #1a1a1a;
+  margin-top: 3px;
+  font-weight: 300;
+}
+
+.noteLine {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  line-height: 1.5;
+  margin: 1px 0;
+}
+
+.noteBullet::before {
+  content: '•';
+  flex-shrink: 0;
+  color: #555c63;
+}
+
+.noteCb {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid #9fa5ab;
+  border-radius: 3px;
+  background: transparent;
+  margin-top: 3px;
+}
+
+.noteCbChecked {
+  background: #3a6b4a;
+  border-color: #3a6b4a;
+}
+
+.noteCbTextChecked {
+  text-decoration: line-through;
+  color: #555c63;
+}
+
+.indent1 { padding-left: 16px; }
+.indent2 { padding-left: 32px; }
+
+.taskActions {
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.editBtn,
+.deleteBtn {
+  opacity: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 6px;
+  transition: opacity 0.2s, color 0.2s, background 0.2s;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555c63;
+}
+
+.editBtn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.editBtn:hover {
+  color: #2e3236;
+  background: rgba(46,50,54,0.1);
+}
+
+.deleteBtn {
+  font-size: 1rem;
+}
+
+.deleteBtn:hover {
+  color: #e05a2b;
+  background: rgba(224,90,43,0.12);
+}
