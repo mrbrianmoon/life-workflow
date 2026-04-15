@@ -111,5 +111,5 @@ export function useTasks() {
     loadTasks();
   }, []);
 
-  return { tasks, loading, error, loadTasks, addTask, updateTask, toggleTask, deleteTask, savePositions };
+  return { tasks, setTasks, loading, error, loadTasks, addTask, updateTask, toggleTask, deleteTask, savePositions };
 }

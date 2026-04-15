@@ -30,7 +30,7 @@ function getToday() {
 
 export default function TodoApp() {
   const {
-    tasks, loading: tasksLoading, error,
+    tasks, setTasks, loading: tasksLoading, error,
     addTask, updateTask, toggleTask, deleteTask, savePositions
   } = useTasks();
   const { sections, loading: sectionsLoading } = usePersonalSections();
@@ -59,17 +59,35 @@ export default function TodoApp() {
   async function handleDragEnd(event) {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
-
+  
     const plan = buildRenderPlan(tasks, activeTab, selectedDate, sections, formatShortDate);
     const taskItems = plan
       .filter(function(item) { return item.type === 'task'; })
       .map(function(item) { return item.row; });
-
+  
     const oldIndex = taskItems.findIndex(function(t) { return t.id === active.id; });
     const newIndex = taskItems.findIndex(function(t) { return t.id === over.id; });
     if (oldIndex === -1 || newIndex === -1) return;
-
+  
     const reordered = arrayMove(taskItems, oldIndex, newIndex);
+  
+    // Update state immediately so the UI snaps to the new order without waiting for Supabase
+    const reorderedIds = reordered.map(function(t) { return t.id; });
+    const otherTasks = tasks.filter(function(t) {
+      return !reorderedIds.includes(t.id);
+    });
+    const merged = [...otherTasks, ...reordered].sort(function(a, b) {
+      const aIdx = reorderedIds.indexOf(a.id);
+      const bIdx = reorderedIds.indexOf(b.id);
+      if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+      if (aIdx !== -1) return 1;
+      if (bIdx !== -1) return -1;
+      return (a.position ?? 0) - (b.position ?? 0);
+    });
+  
+    setTasks(merged);
+  
+    // Write to Supabase in the background
     await savePositions(reordered);
   }
 
