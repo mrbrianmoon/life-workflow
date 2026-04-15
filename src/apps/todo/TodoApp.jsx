@@ -1,10 +1,23 @@
 import { useState } from 'react';
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove
+} from '@dnd-kit/sortable';
 import { useTasks, formatShortDate } from './useTasks.js';
 import { usePersonalSections } from './usePersonalSections.js';
 import { buildRenderPlan } from './buildRenderPlan.js';
 import TabBar from './TabBar.jsx';
 import DateNav from './DateNav.jsx';
-import TaskCard from './TaskCard.jsx';
+import SortableTaskCard from './SortableTaskCard.jsx';
 import SectionLabel from './SectionLabel.jsx';
 import AddModal from './AddModal.jsx';
 import EditModal from './EditModal.jsx';
@@ -16,12 +29,24 @@ function getToday() {
 }
 
 export default function TodoApp() {
-  const { tasks, loading: tasksLoading, error, addTask, updateTask, toggleTask, deleteTask } = useTasks();
+  const {
+    tasks, loading: tasksLoading, error,
+    addTask, updateTask, toggleTask, deleteTask, savePositions
+  } = useTasks();
   const { sections, loading: sectionsLoading } = usePersonalSections();
   const [activeTab, setActiveTab] = useState('work');
   const [selectedDate, setSelectedDate] = useState(getToday());
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 8 }
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 200, tolerance: 8 }
+    })
+  );
 
   function handleShiftDay(dir) {
     setSelectedDate(function(prev) {
@@ -29,6 +54,23 @@ export default function TodoApp() {
       next.setDate(next.getDate() + dir);
       return next;
     });
+  }
+
+  async function handleDragEnd(event) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const plan = buildRenderPlan(tasks, activeTab, selectedDate, sections, formatShortDate);
+    const taskItems = plan
+      .filter(function(item) { return item.type === 'task'; })
+      .map(function(item) { return item.row; });
+
+    const oldIndex = taskItems.findIndex(function(t) { return t.id === active.id; });
+    const newIndex = taskItems.findIndex(function(t) { return t.id === over.id; });
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    const reordered = arrayMove(taskItems, oldIndex, newIndex);
+    await savePositions(reordered);
   }
 
   if (tasksLoading || sectionsLoading) {
@@ -40,6 +82,9 @@ export default function TodoApp() {
   }
 
   const plan = buildRenderPlan(tasks, activeTab, selectedDate, sections, formatShortDate);
+  const taskIds = plan
+    .filter(function(item) { return item.type === 'task'; })
+    .map(function(item) { return item.row.id; });
 
   return (
     <div style={{ maxWidth: '640px', margin: '0 auto', padding: '40px 24px' }}>
@@ -78,20 +123,28 @@ export default function TodoApp() {
         </div>
       )}
 
-      {plan.map(function(item) {
-        if (item.type === 'label') {
-          return <SectionLabel key={item.key} text={item.text} completed={item.completed} />;
-        }
-        return (
-          <TaskCard
-            key={item.key}
-            task={item.row}
-            onToggle={toggleTask}
-            onEdit={setEditingTask}
-            onDelete={deleteTask}
-          />
-        );
-      })}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext items={taskIds} strategy={verticalListSortingStrategy}>
+          {plan.map(function(item) {
+            if (item.type === 'label') {
+              return <SectionLabel key={item.key} text={item.text} completed={item.completed} />;
+            }
+            return (
+              <SortableTaskCard
+                key={item.key}
+                task={item.row}
+                onToggle={toggleTask}
+                onEdit={setEditingTask}
+                onDelete={deleteTask}
+              />
+            );
+          })}
+        </SortableContext>
+      </DndContext>
 
       {showAddModal && (
         <AddModal

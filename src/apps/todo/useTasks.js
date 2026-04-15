@@ -87,9 +87,29 @@ export function useTasks() {
     await supabase.from('tasks').delete().eq('id', id);
   }
 
+  async function savePositions(reorderedTasks) {
+    const updates = reorderedTasks.map(function(task, index) {
+      return supabase
+        .from('tasks')
+        .update({ position: index, category: task.category })
+        .eq('id', task.id);
+    });
+
+    await Promise.all(updates);
+    setTasks(function(prev) {
+      const updatedById = {};
+      reorderedTasks.forEach(function(t, i) {
+        updatedById[t.id] = { ...t, position: i };
+      });
+      return prev.map(function(t) {
+        return updatedById[t.id] ? updatedById[t.id] : t;
+      });
+    });
+  }
+
   useEffect(function() {
     loadTasks();
   }, []);
 
-  return { tasks, loading, error, loadTasks, addTask, updateTask, toggleTask, deleteTask };
+  return { tasks, loading, error, loadTasks, addTask, updateTask, toggleTask, deleteTask, savePositions };
 }
