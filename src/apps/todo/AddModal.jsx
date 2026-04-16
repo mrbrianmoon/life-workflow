@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styles from './AddModal.module.css';
+import NoteEditor from './NoteEditor.jsx';
 
 export default function AddModal({ activeTab, sections, defaultDate, onAdd, onClose }) {
   const [name, setName] = useState('');
@@ -50,12 +51,10 @@ export default function AddModal({ activeTab, sections, defaultDate, onAdd, onCl
           autoFocus
         />
 
-        <label className={styles.label}>Note (optional)</label>
-        <textarea
-          className={styles.textarea}
-          value={note}
-          onChange={function(e) { setNote(e.target.value); }}
-          rows={3}
+<label className={styles.label}>Note (optional)</label>
+        <NoteEditor
+          initialNote={note}
+          onChange={function(val) { setNote(val); }}
         />
 
         {activeTab === 'work' && (

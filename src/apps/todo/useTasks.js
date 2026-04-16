@@ -100,6 +100,21 @@ async function savePositions(reordered) {
 }
 
 useEffect(function() {
+  const channel = supabase
+    .channel('tasks-realtime')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'tasks' },
+      function() { loadTasks(); })
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'tasks' },
+      function() { loadTasks(); })
+    .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'tasks' },
+      function() { loadTasks(); })
+    .subscribe();
+
+  return function() {
+    supabase.removeChannel(channel);
+  };
+}, []);
+useEffect(function() {
   loadTasks();
 }, []);
 

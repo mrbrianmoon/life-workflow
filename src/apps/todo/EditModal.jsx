@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styles from './AddModal.module.css';
+import NoteEditor from './NoteEditor.jsx';
 
 export default function EditModal({ task, sections, onSave, onClose }) {
   const [name, setName] = useState(task.name || '');
@@ -47,12 +48,10 @@ export default function EditModal({ task, sections, onSave, onClose }) {
           autoFocus
         />
 
-        <label className={styles.label}>Note (optional)</label>
-        <textarea
-          className={styles.textarea}
-          value={note}
-          onChange={function(e) { setNote(e.target.value); }}
-          rows={3}
+<label className={styles.label}>Note (optional)</label>
+        <NoteEditor
+          initialNote={note}
+          onChange={function(val) { setNote(val); }}
         />
 
         {!isPersonal && (

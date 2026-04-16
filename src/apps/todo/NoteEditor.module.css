@@ -1,0 +1,117 @@
+.wrap {
+    border: 1.5px solid #9fa5ab;
+    border-radius: 9px;
+    background: #cdd0d4;
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  
+  .wrap:focus-within {
+    border-color: #2e3236;
+  }
+  
+  .toolbar {
+    display: flex;
+    gap: 2px;
+    padding: 6px 8px;
+    border-bottom: 1px solid #9fa5ab;
+    background: rgba(0,0,0,0.04);
+  }
+  
+  .toolBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #555c63;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+  
+  .toolBtn:hover {
+    background: #9fa5ab;
+    color: #1a1a1a;
+  }
+  
+  .toolSep {
+    width: 1px;
+    background: #9fa5ab;
+    margin: 3px 4px;
+  }
+  
+  .lines {
+    padding: 8px 10px;
+    min-height: 72px;
+    max-height: 280px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  
+  .line {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    min-height: 26px;
+  }
+  
+  .indent1 { padding-left: 16px; }
+  .indent2 { padding-left: 32px; }
+  
+  .bulletPrefix {
+    flex-shrink: 0;
+    width: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+    color: #555c63;
+    font-size: 0.85rem;
+    user-select: none;
+  }
+  
+  .plainPrefix {
+    flex-shrink: 0;
+    width: 18px;
+  }
+  
+  .cbPrefix {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid #9fa5ab;
+    border-radius: 3px;
+    background: transparent;
+    margin-top: 5px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  
+  .cbChecked {
+    background: #3a6b4a;
+    border-color: #3a6b4a;
+  }
+  
+  .lineInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: #1a1a1a;
+    padding: 3px 0;
+    line-height: 1.5;
+    min-width: 0;
+  }
+  
+  .checkedText {
+    text-decoration: line-through;
+    color: #555c63;
+  }
