@@ -11,6 +11,7 @@ export function formatShortDate(d) {
 export function useTasks() {
   const [tasks, setTasks] = useState([]);
   const tasksRef = useRef([]);
+  const suppressRealtime = useRef(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -106,7 +107,6 @@ export function useTasks() {
     next.setDate(next.getDate() + 1);
     const nextStr = formatShortDate(next);
 
-    // Optimistic update
     setTasks(function(prev) {
       return prev.map(function(t) {
         return String(t.id) === String(id)
@@ -124,24 +124,31 @@ export function useTasks() {
   }
 
   async function savePositions(reordered) {
-    const updates = reordered.map(function(task, index) {
-      return supabase
-        .from('tasks')
-        .update({ position: index, category: task.category })
-        .eq('id', task.id);
-    });
-    await Promise.all(updates);
+    suppressRealtime.current = true;
+    try {
+      const updates = reordered.map(function(task, index) {
+        return supabase
+          .from('tasks')
+          .update({ position: index, category: task.category })
+          .eq('id', task.id);
+      });
+      await Promise.all(updates);
+    } finally {
+      setTimeout(function() {
+        suppressRealtime.current = false;
+      }, 800);
+    }
   }
 
   useEffect(function() {
     const channel = supabase
       .channel('tasks-realtime')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'tasks' },
-        function() { loadTasks(); })
+        function() { if (!suppressRealtime.current) loadTasks(); })
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'tasks' },
-        function() { loadTasks(); })
+        function() { if (!suppressRealtime.current) loadTasks(); })
       .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'tasks' },
-        function() { loadTasks(); })
+        function() { if (!suppressRealtime.current) loadTasks(); })
       .subscribe();
 
     return function() {
