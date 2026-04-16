@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   DndContext,
   closestCenter,
@@ -13,6 +13,7 @@ import {
   verticalListSortingStrategy,
   arrayMove
 } from '@dnd-kit/sortable';
+import { supabase } from '../../shared/supabaseClient.js';
 import { useTasks, formatShortDate } from './useTasks.js';
 import { usePersonalSections } from './usePersonalSections.js';
 import { buildRenderPlan } from './buildRenderPlan.js';
@@ -26,6 +27,9 @@ import AddModal from './AddModal.jsx';
 import EditModal from './EditModal.jsx';
 import SectionManagerModal from './SectionManagerModal.jsx';
 import ProgressBar from './ProgressBar.jsx';
+import LoginScreen from './LoginScreen.jsx';
+
+const SESSION_TIMEOUT_MS = 12 * 60 * 60 * 1000;
 
 function getToday() {
   const d = new Date();
@@ -33,7 +37,65 @@ function getToday() {
   return d;
 }
 
+function isSessionExpired() {
+  const loginTimestamp = parseInt(localStorage.getItem('tdw_login_at') || '0', 10);
+  return Date.now() - loginTimestamp >= SESSION_TIMEOUT_MS;
+}
+
 export default function TodoApp() {
+  const [authed, setAuthed] = useState(null); // null = checking, false = logged out, true = logged in
+
+  // ── Auth check on mount ──────────────────────────────────────
+  useEffect(function() {
+    async function checkSession() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session && !isSessionExpired()) {
+        setAuthed(true);
+      } else {
+        if (session) {
+          await supabase.auth.signOut();
+          localStorage.removeItem('tdw_login_at');
+        }
+        setAuthed(false);
+      }
+    }
+    checkSession();
+  }, []);
+
+  // ── Periodic 12h timeout check ───────────────────────────────
+  useEffect(function() {
+    const interval = setInterval(async function() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session && isSessionExpired()) {
+        await supabase.auth.signOut();
+        localStorage.removeItem('tdw_login_at');
+        setAuthed(false);
+      }
+    }, 60 * 1000);
+    return function() { clearInterval(interval); };
+  }, []);
+
+  async function handleSignOut() {
+    await supabase.auth.signOut();
+    localStorage.removeItem('tdw_login_at');
+    setAuthed(false);
+  }
+
+  // ── Show nothing while checking session ─────────────────────
+  if (authed === null) {
+    return <div style={{ padding: '40px', textAlign: 'center', color: '#555c63' }}>Loading…</div>;
+  }
+
+  // ── Show login screen if not authenticated ───────────────────
+  if (authed === false) {
+    return <LoginScreen onLogin={function() { setAuthed(true); }} />;
+  }
+
+  // ── Authenticated app ────────────────────────────────────────
+  return <TodoAppInner onSignOut={handleSignOut} />;
+}
+
+function TodoAppInner({ onSignOut }) {
   const {
     tasks, tasksRef, setTasks, loading: tasksLoading, error,
     addTask, updateTask, toggleTask, deleteTask, forwardTask, savePositions
@@ -169,6 +231,21 @@ export default function TodoApp() {
               ✎ Manage Sections
             </button>
           )}
+          <button
+            onClick={onSignOut}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '5px',
+              marginTop: '8px', marginLeft: '8px',
+              background: 'transparent', color: '#555c63',
+              fontFamily: 'DM Sans, sans-serif', fontSize: '0.72rem',
+              fontWeight: 500, letterSpacing: '0.04em',
+              padding: '4px 10px', borderRadius: '99px',
+              border: '1px solid #9fa5ab', cursor: 'pointer',
+              transition: 'background 0.2s, color 0.2s, border-color 0.2s'
+            }}
+          >
+            ↩ Sign out
+          </button>
         </div>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', flexShrink: 0 }}>
           <ClockWidget />
