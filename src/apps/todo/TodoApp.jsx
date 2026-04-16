@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {
   DndContext,
   closestCenter,
   PointerSensor,
   TouchSensor,
   useSensor,
-  useSensors
+  useSensors,
+  DragOverlay,
 } from '@dnd-kit/core';
 import {
   SortableContext,
@@ -18,6 +19,7 @@ import { buildRenderPlan } from './buildRenderPlan.js';
 import TabBar from './TabBar.jsx';
 import DateNav from './DateNav.jsx';
 import SortableTaskCard from './SortableTaskCard.jsx';
+import TaskCard from './TaskCard.jsx';
 import SectionLabel from './SectionLabel.jsx';
 import AddModal from './AddModal.jsx';
 import EditModal from './EditModal.jsx';
@@ -30,7 +32,7 @@ function getToday() {
 
 export default function TodoApp() {
   const {
-    tasks, setTasks, loading: tasksLoading, error,
+    tasks, tasksRef, setTasks, loading: tasksLoading, error,
     addTask, updateTask, toggleTask, deleteTask, savePositions
   } = useTasks();
   const { sections, loading: sectionsLoading } = usePersonalSections();
@@ -38,6 +40,8 @@ export default function TodoApp() {
   const [selectedDate, setSelectedDate] = useState(getToday());
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  const [activeTask, setActiveTask] = useState(null);
+  const isDragging = useRef(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -56,38 +60,57 @@ export default function TodoApp() {
     });
   }
 
+  function handleDragStart(event) {
+    if (isDragging.current) return;
+    isDragging.current = true;
+    const task = tasks.find(function(t) {
+      return String(t.id) === String(event.active.id);
+    });
+    setActiveTask(task || null);
+  }
+
   async function handleDragEnd(event) {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
+    setActiveTask(null);
+    if (!isDragging.current) return;
+    isDragging.current = false;
   
-    const plan = buildRenderPlan(tasks, activeTab, selectedDate, sections, formatShortDate);
+    const { active, over } = event;
+    if (!over || String(active.id) === String(over.id)) return;
+  
+    const currentTasks = tasksRef.current;
+  
+    const plan = buildRenderPlan(currentTasks, activeTab, selectedDate, sections, formatShortDate);
     const taskItems = plan
       .filter(function(item) { return item.type === 'task'; })
       .map(function(item) { return item.row; });
   
-    const oldIndex = taskItems.findIndex(function(t) { return t.id === active.id; });
-    const newIndex = taskItems.findIndex(function(t) { return t.id === over.id; });
+    const oldIndex = taskItems.findIndex(function(t) {
+      return String(t.id) === String(active.id);
+    });
+    const newIndex = taskItems.findIndex(function(t) {
+      return String(t.id) === String(over.id);
+    });
     if (oldIndex === -1 || newIndex === -1) return;
   
     const reordered = arrayMove(taskItems, oldIndex, newIndex);
   
-    // Update state immediately so the UI snaps to the new order without waiting for Supabase
-    const reorderedIds = reordered.map(function(t) { return t.id; });
-    const otherTasks = tasks.filter(function(t) {
-      return !reorderedIds.includes(t.id);
-    });
-    const merged = [...otherTasks, ...reordered].sort(function(a, b) {
-      const aIdx = reorderedIds.indexOf(a.id);
-      const bIdx = reorderedIds.indexOf(b.id);
-      if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
-      if (aIdx !== -1) return 1;
-      if (bIdx !== -1) return -1;
-      return (a.position ?? 0) - (b.position ?? 0);
+    // Assign fresh sequential positions to the reordered visible tasks
+    const updatedById = {};
+    reordered.forEach(function(t, i) {
+      updatedById[String(t.id)] = i;
     });
   
-    setTasks(merged);
+    // Rebuild the full tasks array with updated positions for visible tasks
+    const newTasks = currentTasks.map(function(t) {
+      if (updatedById.hasOwnProperty(String(t.id))) {
+        return { ...t, position: updatedById[String(t.id)] };
+      }
+      return t;
+    });
   
-    // Write to Supabase in the background
+    setTasks(newTasks);
+    tasksRef.current = newTasks;
+  
     await savePositions(reordered);
   }
 
@@ -144,6 +167,7 @@ export default function TodoApp() {
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
         <SortableContext items={taskIds} strategy={verticalListSortingStrategy}>
@@ -162,6 +186,18 @@ export default function TodoApp() {
             );
           })}
         </SortableContext>
+        <DragOverlay dropAnimation={null}>
+          {activeTask ? (
+            <div style={{ opacity: 0.95, cursor: 'grabbing' }}>
+              <TaskCard
+                task={activeTask}
+                onToggle={function() {}}
+                onEdit={function() {}}
+                onDelete={function() {}}
+              />
+            </div>
+          ) : null}
+        </DragOverlay>
       </DndContext>
 
       {showAddModal && (

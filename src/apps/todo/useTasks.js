@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../shared/supabaseClient.js';
 
 const MONTH_SHORT = ['Jan','Feb','Mar','Apr','May','Jun',
@@ -10,21 +10,23 @@ export function formatShortDate(d) {
 
 export function useTasks() {
   const [tasks, setTasks] = useState([]);
+  const tasksRef = useRef([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+ 
   async function loadTasks() {
     const { data, error } = await supabase
       .from('tasks')
       .select('*')
       .order('position', { ascending: true });
-
+  
     if (error) {
       setError(error.message);
       setLoading(false);
       return;
     }
-
+  
+    tasksRef.current = data || [];
     setTasks(data || []);
     setLoading(false);
   }
@@ -87,29 +89,19 @@ export function useTasks() {
     await supabase.from('tasks').delete().eq('id', id);
   }
 
-  async function savePositions(reorderedTasks) {
-    const updates = reorderedTasks.map(function(task, index) {
-      return supabase
-        .from('tasks')
-        .update({ position: index, category: task.category })
-        .eq('id', task.id);
-    });
+async function savePositions(reordered) {
+  const updates = reordered.map(function(task, index) {
+    return supabase
+      .from('tasks')
+      .update({ position: index, category: task.category })
+      .eq('id', task.id);
+  });
+  await Promise.all(updates);
+}
 
-    await Promise.all(updates);
-    setTasks(function(prev) {
-      const updatedById = {};
-      reorderedTasks.forEach(function(t, i) {
-        updatedById[t.id] = { ...t, position: i };
-      });
-      return prev.map(function(t) {
-        return updatedById[t.id] ? updatedById[t.id] : t;
-      });
-    });
-  }
+useEffect(function() {
+  loadTasks();
+}, []);
 
-  useEffect(function() {
-    loadTasks();
-  }, []);
-
-  return { tasks, setTasks, loading, error, loadTasks, addTask, updateTask, toggleTask, deleteTask, savePositions };
+return { tasks, tasksRef, setTasks, loading, error, loadTasks, addTask, updateTask, toggleTask, deleteTask, savePositions };
 }
