@@ -18,11 +18,14 @@ import { usePersonalSections } from './usePersonalSections.js';
 import { buildRenderPlan } from './buildRenderPlan.js';
 import TabBar from './TabBar.jsx';
 import DateNav from './DateNav.jsx';
+import ClockWidget from './ClockWidget.jsx';
 import SortableTaskCard from './SortableTaskCard.jsx';
 import TaskCard from './TaskCard.jsx';
 import SectionLabel from './SectionLabel.jsx';
 import AddModal from './AddModal.jsx';
 import EditModal from './EditModal.jsx';
+import SectionManagerModal from './SectionManagerModal.jsx';
+import ProgressBar from './ProgressBar.jsx';
 
 function getToday() {
   const d = new Date();
@@ -33,14 +36,19 @@ function getToday() {
 export default function TodoApp() {
   const {
     tasks, tasksRef, setTasks, loading: tasksLoading, error,
-    addTask, updateTask, toggleTask, deleteTask, savePositions
+    addTask, updateTask, toggleTask, deleteTask, forwardTask, savePositions
   } = useTasks();
-  const { sections, loading: sectionsLoading } = usePersonalSections();
-  const [activeTab, setActiveTab] = useState('work');
-  const [selectedDate, setSelectedDate] = useState(getToday());
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [editingTask, setEditingTask] = useState(null);
-  const [activeTask, setActiveTask] = useState(null);
+  const {
+    sections, loading: sectionsLoading,
+    addSection, renameSection, deleteSection
+  } = usePersonalSections();
+
+  const [activeTab, setActiveTab]           = useState('work');
+  const [selectedDate, setSelectedDate]     = useState(getToday());
+  const [showAddModal, setShowAddModal]     = useState(false);
+  const [editingTask, setEditingTask]       = useState(null);
+  const [showSectionMgr, setShowSectionMgr] = useState(false);
+  const [activeTask, setActiveTask]         = useState(null);
   const isDragging = useRef(false);
 
   const sensors = useSensors(
@@ -60,6 +68,10 @@ export default function TodoApp() {
     });
   }
 
+  function handlePickDate(date) {
+    setSelectedDate(date);
+  }
+
   function handleDragStart(event) {
     if (isDragging.current) return;
     isDragging.current = true;
@@ -73,17 +85,17 @@ export default function TodoApp() {
     setActiveTask(null);
     if (!isDragging.current) return;
     isDragging.current = false;
-  
+
     const { active, over } = event;
     if (!over || String(active.id) === String(over.id)) return;
-  
+
     const currentTasks = tasksRef.current;
-  
+
     const plan = buildRenderPlan(currentTasks, activeTab, selectedDate, sections, formatShortDate);
     const taskItems = plan
       .filter(function(item) { return item.type === 'task'; })
       .map(function(item) { return item.row; });
-  
+
     const oldIndex = taskItems.findIndex(function(t) {
       return String(t.id) === String(active.id);
     });
@@ -91,26 +103,24 @@ export default function TodoApp() {
       return String(t.id) === String(over.id);
     });
     if (oldIndex === -1 || newIndex === -1) return;
-  
+
     const reordered = arrayMove(taskItems, oldIndex, newIndex);
-  
-    // Assign fresh sequential positions to the reordered visible tasks
+
     const updatedById = {};
     reordered.forEach(function(t, i) {
       updatedById[String(t.id)] = i;
     });
-  
-    // Rebuild the full tasks array with updated positions for visible tasks
+
     const newTasks = currentTasks.map(function(t) {
       if (updatedById.hasOwnProperty(String(t.id))) {
         return { ...t, position: updatedById[String(t.id)] };
       }
       return t;
     });
-  
+
     setTasks(newTasks);
     tasksRef.current = newTasks;
-  
+
     await savePositions(reordered);
   }
 
@@ -131,28 +141,54 @@ export default function TodoApp() {
     <div style={{ maxWidth: '640px', margin: '0 auto', padding: '40px 24px' }}>
       <TabBar activeTab={activeTab} onSwitch={setActiveTab} />
 
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '24px' }}>
+      {/* ── Header ── */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '8px' }}>
         <div>
           <h2 style={{ fontFamily: 'DM Serif Display, serif', marginBottom: '8px' }}>
             {activeTab === 'work' ? 'Work' : 'Personal'}
           </h2>
-          {activeTab === 'work' && (
-            <DateNav selectedDate={selectedDate} onShift={handleShiftDay} />
+          <DateNav
+            selectedDate={selectedDate}
+            onShift={handleShiftDay}
+            onPickDate={handlePickDate}
+            showPill={activeTab === 'work'}
+          />
+          {activeTab === 'personal' && (
+            <button
+              onClick={function() { setShowSectionMgr(true); }}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '5px',
+                marginTop: '8px',
+                background: '#2e3236', color: '#e8e4dc',
+                fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem',
+                fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase',
+                padding: '5px 14px', borderRadius: '99px', border: 'none', cursor: 'pointer',
+                transition: 'background 0.2s'
+              }}
+            >
+              ✎ Manage Sections
+            </button>
           )}
         </div>
-        <button
-          onClick={function() { setShowAddModal(true); }}
-          style={{
-            marginTop: '6px', width: '42px', height: '42px', borderRadius: '50%',
-            background: '#111', color: 'white', border: 'none', fontSize: '1.5rem',
-            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.3)', flexShrink: 0
-          }}
-          title="Add item"
-        >
-          +
-        </button>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', flexShrink: 0 }}>
+          <ClockWidget />
+          <button
+            onClick={function() { setShowAddModal(true); }}
+            style={{
+              marginTop: '6px', width: '42px', height: '42px', borderRadius: '50%',
+              background: '#111', color: 'white', border: 'none', fontSize: '1.5rem',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.3)', flexShrink: 0
+            }}
+            title="Add item"
+          >
+            +
+          </button>
+        </div>
       </div>
+
+      {/* ── Progress Bar ── */}
+      <ProgressBar plan={plan} />
 
       {plan.length === 0 && (
         <div style={{
@@ -164,6 +200,7 @@ export default function TodoApp() {
         </div>
       )}
 
+      {/* ── Task List ── */}
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -182,6 +219,7 @@ export default function TodoApp() {
                 onToggle={toggleTask}
                 onEdit={setEditingTask}
                 onDelete={deleteTask}
+                onForward={forwardTask}
               />
             );
           })}
@@ -194,12 +232,14 @@ export default function TodoApp() {
                 onToggle={function() {}}
                 onEdit={function() {}}
                 onDelete={function() {}}
+                onForward={null}
               />
             </div>
           ) : null}
         </DragOverlay>
       </DndContext>
 
+      {/* ── Modals ── */}
       {showAddModal && (
         <AddModal
           activeTab={activeTab}
@@ -216,6 +256,16 @@ export default function TodoApp() {
           sections={sections}
           onSave={updateTask}
           onClose={function() { setEditingTask(null); }}
+        />
+      )}
+
+      {showSectionMgr && (
+        <SectionManagerModal
+          sections={sections}
+          onAdd={addSection}
+          onRename={renameSection}
+          onDelete={deleteSection}
+          onClose={function() { setShowSectionMgr(false); }}
         />
       )}
     </div>

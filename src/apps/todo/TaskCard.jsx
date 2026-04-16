@@ -61,8 +61,9 @@ function NoteDisplay({ note }) {
   );
 }
 
-export default function TaskCard({ task, onToggle, onEdit, onDelete }) {
+export default function TaskCard({ task, onToggle, onEdit, onDelete, onForward }) {
   const fwdCount = task.fwd_count || 0;
+  const showForward = onForward && task.tab !== 'personal' && task.category !== 'Ongoing';
 
   return (
     <div className={`${styles.task} ${task.done ? styles.done : ''}`}>
@@ -97,6 +98,14 @@ export default function TaskCard({ task, onToggle, onEdit, onDelete }) {
             <path d="M11.5 1.5l3 3L5 14H2v-3L11.5 1.5z"/>
           </svg>
         </button>
+        {showForward && (
+          <button className={styles.forwardBtn} onClick={function() { onForward(task.id); }} title="Forward to tomorrow">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"
+                 strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 8h10M9 4l4 4-4 4"/>
+            </svg>
+          </button>
+        )}
         <button className={styles.deleteBtn} onClick={function() { onDelete(task.id); }} title="Remove">✕</button>
       </div>
     </div>

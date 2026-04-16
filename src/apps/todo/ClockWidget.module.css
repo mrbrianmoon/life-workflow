@@ -1,0 +1,44 @@
+.wrap {
+  flex-shrink: 0;
+  text-align: right;
+  margin-top: 4px;
+}
+
+.wrap :global(.DPDC) {
+  width: auto;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+.wrap :global(.DPDCh) {
+  display: none;
+}
+
+.wrap :global(.DPDCt) {
+  font-size: 28px;
+  color: #1a1a1a;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.wrap :global(.DPDCd) {
+  font-size: 0.72rem;
+  color: #555c63;
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+.wrap :global(.DPl) {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+}
+
+.wrap :global(.DPDCs) {
+  display: none !important;
+}

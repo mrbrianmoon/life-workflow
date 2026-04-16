@@ -2,7 +2,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import TaskCard from './TaskCard.jsx';
 
-export default function SortableTaskCard({ task, onToggle, onEdit, onDelete }) {
+export default function SortableTaskCard({ task, onToggle, onEdit, onDelete, onForward }) {
   const {
     attributes,
     listeners,
@@ -26,6 +26,7 @@ export default function SortableTaskCard({ task, onToggle, onEdit, onDelete }) {
         onToggle={onToggle}
         onEdit={onEdit}
         onDelete={onDelete}
+        onForward={onForward}
       />
     </div>
   );

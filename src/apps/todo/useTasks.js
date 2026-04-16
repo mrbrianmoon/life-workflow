@@ -13,19 +13,19 @@ export function useTasks() {
   const tasksRef = useRef([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
- 
+
   async function loadTasks() {
     const { data, error } = await supabase
       .from('tasks')
       .select('*')
       .order('position', { ascending: true });
-  
+
     if (error) {
       setError(error.message);
       setLoading(false);
       return;
     }
-  
+
     tasksRef.current = data || [];
     setTasks(data || []);
     setLoading(false);
@@ -89,34 +89,69 @@ export function useTasks() {
     await supabase.from('tasks').delete().eq('id', id);
   }
 
-async function savePositions(reordered) {
-  const updates = reordered.map(function(task, index) {
-    return supabase
-      .from('tasks')
-      .update({ position: index, category: task.category })
-      .eq('id', task.id);
-  });
-  await Promise.all(updates);
-}
+  async function forwardTask(id) {
+    const task = tasksRef.current.find(function(t) { return String(t.id) === String(id); });
+    if (!task) return;
 
-useEffect(function() {
-  const channel = supabase
-    .channel('tasks-realtime')
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'tasks' },
-      function() { loadTasks(); })
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'tasks' },
-      function() { loadTasks(); })
-    .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'tasks' },
-      function() { loadTasks(); })
-    .subscribe();
+    const count = (task.fwd_count || 0) + 1;
 
-  return function() {
-    supabase.removeChannel(channel);
-  };
-}, []);
-useEffect(function() {
-  loadTasks();
-}, []);
+    const parts = (task.display_date || task.origin_date || '').match(/(\w+)\s+(\d+),\s+(\d+)/);
+    var baseDate;
+    if (parts) {
+      baseDate = new Date(`${parts[1]} ${parts[2]}, ${parts[3]}`);
+    } else {
+      baseDate = new Date();
+    }
+    const next = new Date(baseDate);
+    next.setDate(next.getDate() + 1);
+    const nextStr = formatShortDate(next);
 
-return { tasks, tasksRef, setTasks, loading, error, loadTasks, addTask, updateTask, toggleTask, deleteTask, savePositions };
+    // Optimistic update
+    setTasks(function(prev) {
+      return prev.map(function(t) {
+        return String(t.id) === String(id)
+          ? { ...t, fwd_count: count, display_date: nextStr }
+          : t;
+      });
+    });
+    tasksRef.current = tasksRef.current.map(function(t) {
+      return String(t.id) === String(id)
+        ? { ...t, fwd_count: count, display_date: nextStr }
+        : t;
+    });
+
+    await supabase.from('tasks').update({ fwd_count: count, display_date: nextStr }).eq('id', id);
+  }
+
+  async function savePositions(reordered) {
+    const updates = reordered.map(function(task, index) {
+      return supabase
+        .from('tasks')
+        .update({ position: index, category: task.category })
+        .eq('id', task.id);
+    });
+    await Promise.all(updates);
+  }
+
+  useEffect(function() {
+    const channel = supabase
+      .channel('tasks-realtime')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'tasks' },
+        function() { loadTasks(); })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'tasks' },
+        function() { loadTasks(); })
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'tasks' },
+        function() { loadTasks(); })
+      .subscribe();
+
+    return function() {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  useEffect(function() {
+    loadTasks();
+  }, []);
+
+  return { tasks, tasksRef, setTasks, loading, error, loadTasks, addTask, updateTask, toggleTask, deleteTask, forwardTask, savePositions };
 }

@@ -1,52 +1,179 @@
 .dateRow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 24px;
-  }
-  
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: #2e3236;
-    color: #e8e4dc;
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 5px 14px;
-    border-radius: 99px;
-  }
-  
-  .navPill {
-    display: inline-flex;
-    align-items: stretch;
-    background: #2e3236;
-    border-radius: 99px;
-    overflow: hidden;
-  }
-  
-  .navBtn {
-    background: transparent;
-    color: #e8e4dc;
-    border: none;
-    width: 26px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px 0;
-    transition: background 0.15s;
-  }
-  
-  .navBtn:hover {
-    background: #444a50;
-  }
-  
-  .divider {
-    width: 1px;
-    background: #4a5058;
-    margin: 4px 0;
-  }
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+/* ── Badge ───────────────────────────────────────────────────── */
+.badgeWrap {
+  position: relative;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #2e3236;
+  color: #e8e4dc;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 99px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.badge:hover {
+  background: #444a50;
+}
+
+/* Fixed width so the nav pill never shifts position */
+.badgeText {
+  display: inline-block;
+  min-width: 210px;
+}
+
+/* ── Calendar Popover ────────────────────────────────────────── */
+.calPopover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 200;
+  background: #cdd0d4;
+  border: 1.5px solid #9fa5ab;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+  width: 260px;
+  animation: slideUp 0.2s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.calHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.calMonthLabel {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+}
+
+.calNav {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555c63;
+  font-size: 1.1rem;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+  line-height: 1;
+}
+
+.calNav:hover {
+  background: #b8bcc0;
+  color: #1a1a1a;
+}
+
+.calGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.calDayLabel {
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #555c63;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 0;
+}
+
+.calDay {
+  text-align: center;
+  font-size: 0.82rem;
+  padding: 5px 2px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #1a1a1a;
+  transition: background 0.15s;
+}
+
+.calDay:hover {
+  background: #b8bcc0;
+}
+
+.otherMonth {
+  color: #9fa5ab;
+  cursor: default;
+}
+
+.otherMonth:hover {
+  background: transparent;
+}
+
+.today {
+  font-weight: 700;
+  color: #3a6b4a;
+}
+
+.selected {
+  background: #2e3236;
+  color: #e8e4dc;
+  font-weight: 600;
+}
+
+.selected:hover {
+  background: #444a50;
+}
+
+/* ── Nav Pill ────────────────────────────────────────────────── */
+.navPill {
+  display: inline-flex;
+  align-items: stretch;
+  background: #2e3236;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.navBtn {
+  background: transparent;
+  color: #e8e4dc;
+  border: none;
+  width: 26px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 0;
+  transition: background 0.15s;
+}
+
+.navBtn:hover {
+  background: #444a50;
+}
+
+.navBtn:active {
+  background: #1a1e21;
+}
+
+.divider {
+  width: 1px;
+  background: #4a5058;
+  margin: 4px 0;
+}

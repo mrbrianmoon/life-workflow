@@ -1,0 +1,25 @@
+.wrap {
+  max-width: 640px;
+  margin: 0 auto 24px;
+}
+
+.barTrack {
+  height: 6px;
+  background: #9fa5ab;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  background: #3a6b4a;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+.label {
+  font-size: 0.78rem;
+  color: #555c63;
+  text-align: right;
+  margin-top: 6px;
+}

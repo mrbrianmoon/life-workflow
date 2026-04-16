@@ -12,6 +12,7 @@
 }
 
 .task:hover .editBtn,
+.task:hover .forwardBtn,
 .task:hover .deleteBtn {
   opacity: 1;
 }
@@ -132,6 +133,7 @@
 }
 
 .editBtn,
+.forwardBtn,
 .deleteBtn {
   opacity: 0;
   background: none;
@@ -153,6 +155,16 @@
 }
 
 .editBtn:hover {
+  color: #2e3236;
+  background: rgba(46,50,54,0.1);
+}
+
+.forwardBtn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.forwardBtn:hover {
   color: #2e3236;
   background: rgba(46,50,54,0.1);
 }
