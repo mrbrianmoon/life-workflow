@@ -93,3 +93,4 @@
     grid-template-columns: 1fr;
   }
 }
+.status-live { background: rgba(58, 107, 74, 0.15); color: #3a6b4a; }
