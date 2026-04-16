@@ -12,7 +12,7 @@ export default function Home() {
           <div className="app-card-icon">✓</div>
           <h2>To Do Workstream</h2>
           <p>Task management with priorities, sections, and real-time sync.</p>
-          <span className="app-card-status status-migrating">Migration in progress</span>
+          <span className="app-card-status status-live">Live</span>
         </Link>
 
         <Link to="/lawn-care" className="app-card">
