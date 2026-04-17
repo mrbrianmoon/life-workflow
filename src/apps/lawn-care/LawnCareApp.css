@@ -35,126 +35,6 @@
 .auth-notice p { color: #1a1a1a; font-size: 0.95rem; }
 .auth-hint { color: #555c63; font-size: 0.85rem; margin-top: 8px; }
 
-/* ── Zone Manager ──────────────────────────────────── */
-
-.zone-manager {
-  margin-bottom: 32px;
-  background: #cdd0d4;
-  border: 1px solid #9fa5ab;
-  border-radius: 10px;
-  padding: 16px 20px;
-}
-
-.zone-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.zone-header h3 {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.zone-add-btn {
-  background: #2e3236;
-  color: #e8e4dc;
-  border: none;
-  padding: 5px 14px;
-  border-radius: 20px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.78rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.zone-add-btn:hover { background: #444a50; }
-
-.zone-form {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 12px;
-  padding: 12px;
-  background: #b8bcc0;
-  border-radius: 8px;
-}
-
-.zone-form input,
-.zone-form select {
-  padding: 8px 12px;
-  border: 1.5px solid #9fa5ab;
-  border-radius: 8px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.9rem;
-  color: #1a1a1a;
-  background: #cdd0d4;
-  outline: none;
-}
-
-.zone-form input:focus,
-.zone-form select:focus { border-color: #2e3236; }
-
-.zone-save-btn {
-  padding: 8px 16px;
-  background: #2e3236;
-  color: #e8e4dc;
-  border: none;
-  border-radius: 8px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  align-self: flex-start;
-}
-
-.zone-save-btn:hover { background: #444a50; }
-.zone-save-btn:disabled { background: #888; cursor: not-allowed; }
-
-.zone-empty {
-  color: #555c63;
-  font-size: 0.85rem;
-  font-style: italic;
-}
-
-.zone-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.zone-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 12px;
-  background: #b8bcc0;
-  border-radius: 8px;
-}
-
-.zone-info { display: flex; flex-direction: column; gap: 2px; }
-.zone-name { font-weight: 600; font-size: 0.9rem; }
-.zone-details { font-size: 0.78rem; color: #555c63; }
-
-.zone-delete-btn {
-  background: none;
-  border: none;
-  color: #9fa5ab;
-  cursor: pointer;
-  font-size: 0.9rem;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: color 0.2s, background 0.2s;
-}
-
-.zone-delete-btn:hover {
-  color: #b5432a;
-  background: rgba(224, 90, 43, 0.1);
-}
-
 /* ── Seasonal Schedule ─────────────────────────────── */
 
 .seasonal-schedule {
@@ -422,24 +302,15 @@
   font-size: 0.85rem;
 }
 
-.template-badge,
-.zone-badge {
+.template-badge {
   font-size: 0.65rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 1px 7px;
   border-radius: 20px;
-}
-
-.template-badge {
   background: #2e3236;
   color: #e8e4dc;
-}
-
-.zone-badge {
-  background: #b0cce8;
-  color: #2a5e8a;
 }
 
 .schedule-desc {
@@ -581,4 +452,93 @@
   .month-selector { gap: 3px; }
   .month-pill { padding: 5px 7px; font-size: 0.7rem; }
   .add-item-row { flex-direction: column; }
+}
+
+/* ── Inner Tab Bar (Lawn | Arborvitae) ─────────────── */
+
+.lawn-tab-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #9fa5ab;
+  margin-bottom: 24px;
+}
+
+.lawn-tab-btn {
+  padding: 10px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #555c63;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  letter-spacing: 0.02em;
+}
+
+.lawn-tab-btn:hover { color: #1a1a1a; }
+
+.lawn-tab-btn.active {
+  color: #1a1a1a;
+  border-bottom-color: #3a6b4a;
+}
+
+.lawn-tab-btn.active.arborvitae {
+  border-bottom-color: #1D5C8A;
+}
+
+.lawn-tab-content {
+  /* content area below inner tab bar */
+}
+
+/* ── Year Navigation ───────────────────────────────── */
+
+.year-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  background: #2e3236;
+  border-radius: 99px;
+  padding: 4px 4px 4px 12px;
+}
+
+.year-nav span {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #e8e4dc;
+  min-width: 36px;
+  text-align: center;
+}
+
+.year-nav button {
+  background: transparent;
+  color: #e8e4dc;
+  border: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  line-height: 1;
+}
+
+.year-nav button:hover { background: #444a50; }
+
+/* ── Section Label (Gantt / SeasonCards header) ────── */
+
+.section-label-lc {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9fa5ab;
+  margin-bottom: 10px;
+  margin-top: 28px;
 }

@@ -1,0 +1,27 @@
+.tab {
+  /* inherits padding from parent container */
+}
+
+.heading {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  color: #1a1a18;
+  margin-bottom: 4px;
+}
+
+.sub {
+  font-size: 14px;
+  color: #6b6860;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.sectionLabel {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a09d97;
+  margin-bottom: 10px;
+}

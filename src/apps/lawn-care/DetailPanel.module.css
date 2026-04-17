@@ -1,0 +1,164 @@
+.panel {
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  background: #f9f8f5;
+  border: 1px solid #e2ddd5;
+  border-radius: 8px;
+  animation: slideDown 0.18s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #1a1a18;
+  flex: 1;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  color: #a09d97;
+  padding: 2px 4px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+  line-height: 1;
+}
+
+.closeBtn:hover {
+  color: #1a1a18;
+  background: #e2ddd5;
+}
+
+.body {
+  font-size: 13px;
+  color: #6b6860;
+  line-height: 1.65;
+}
+
+.divider {
+  height: 1px;
+  background: #e2ddd5;
+  margin: 12px 0;
+}
+
+.tasksSection {
+  /* container for linked tasks */
+}
+
+.tasksHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.tasksLabel {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #a09d97;
+}
+
+.tasksCount {
+  font-size: 11px;
+  color: #6b6860;
+}
+
+.noTasks {
+  font-size: 12px;
+  color: #a09d97;
+  font-style: italic;
+}
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.taskItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: #ffffff;
+  border: 1px solid #e2ddd5;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  user-select: none;
+}
+
+.taskItem:hover {
+  background: #f5f3ee;
+  border-color: #c8c4bc;
+}
+
+.taskItemDone {
+  background: #f0f4f1;
+  border-color: #c8d6ca;
+}
+
+.taskItemDone:hover {
+  background: #e8efe9;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1.5px solid #c8c4bc;
+  background: #ffffff;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.checkboxDone {
+  background: #3a6b4a;
+  border-color: #3a6b4a;
+}
+
+.taskIcon {
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.taskTitle {
+  flex: 1;
+  font-size: 13px;
+  color: #1a1a18;
+  line-height: 1.4;
+}
+
+.taskItemDone .taskTitle {
+  text-decoration: line-through;
+  color: #6b6860;
+}
+
+.doneDate {
+  font-size: 11px;
+  color: #a09d97;
+  white-space: nowrap;
+  flex-shrink: 0;
+}

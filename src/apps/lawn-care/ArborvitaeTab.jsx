@@ -1,25 +1,55 @@
 import { useState } from 'react';
 import { supabase } from '../../shared/supabaseClient';
-import { CATEGORIES, MONTH_NAMES, INDIANA_TEMPLATE } from './scheduleTemplate';
+import { CATEGORIES, MONTH_NAMES, ARBORVITAE_TEMPLATE } from './scheduleTemplate';
+import { treeTasks, treeSeasons } from './ganttData';
+import GanttGrid from './GanttGrid';
+import DetailPanel from './DetailPanel';
+import SeasonCards from './SeasonCards';
+import styles from './ArborvitaeTab.module.css';
 
-// Props:
-//   items           - lc_schedule_items rows (owned by parent LawnCareApp)
-//   year            - current year (owned by parent)
-//   onToggleItem    - function(id, currentDone) — parent handles DB write + state update
-//   onItemsChanged  - function() — parent reloads items after insert/delete
-export default function SeasonalSchedule({ items, year, onToggleItem, onItemsChanged }) {
+// props:
+//   items         - lc_schedule_items rows with tree: gantt_key prefix
+//   year          - current year (owned by parent)
+//   onToggleItem  - function(id, currentDone)
+//   onItemsChanged - function() — parent reloads after insert/delete
+export default function ArborvitaeTab({ items, year, onToggleItem, onItemsChanged }) {
+  const [activeDetail, setActiveDetail] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
-  const [newCategory, setNewCategory] = useState('general');
+  const [newCategory, setNewCategory] = useState('watering');
   const [saving, setSaving] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loadingTemplate, setLoadingTemplate] = useState(false);
+
+  // Build completions map: gantt_key → { total, done }
+  function buildCompletions(rows) {
+    var map = {};
+    rows.forEach(function (row) {
+      if (!row.gantt_key) return;
+      if (!map[row.gantt_key]) {
+        map[row.gantt_key] = { total: 0, done: 0 };
+      }
+      map[row.gantt_key].total += 1;
+      if (row.done) map[row.gantt_key].done += 1;
+    });
+    return map;
+  }
+
+  var completions = buildCompletions(items);
+
+  function handleBarClick(key, title, body) {
+    if (activeDetail && activeDetail.key === key) {
+      setActiveDetail(null);
+    } else {
+      setActiveDetail({ key, title, body });
+    }
+  }
 
   async function loadTemplate() {
-    if (loading) return;
+    if (loadingTemplate) return;
     if (items.length > 0) {
-      if (!confirm('This will add the Indiana template items to your schedule. Items you already have won\'t be duplicated. Continue?')) {
+      if (!confirm('This will add the arborvitae template items to your schedule. Items you already have won\'t be duplicated. Continue?')) {
         return;
       }
     }
@@ -36,7 +66,7 @@ export default function SeasonalSchedule({ items, year, onToggleItem, onItemsCha
       items.map(function (i) { return i.title + ':' + i.month_start; })
     );
 
-    const newItems = INDIANA_TEMPLATE
+    const newItems = ARBORVITAE_TEMPLATE
       .filter(function (t) {
         if (t.gantt_key) return !existingGanttKeys.has(t.gantt_key);
         return !existingTitleKeys.has(t.title + ':' + t.month_start);
@@ -49,7 +79,7 @@ export default function SeasonalSchedule({ items, year, onToggleItem, onItemsCha
           category: t.category,
           month_start: t.month_start,
           month_end: t.month_end || null,
-          gantt_key: t.gantt_key || null,
+          gantt_key: t.gantt_key,
           is_template: true,
           done: false,
           year: year,
@@ -62,12 +92,12 @@ export default function SeasonalSchedule({ items, year, onToggleItem, onItemsCha
       return;
     }
 
-    setLoading(true);
+    setLoadingTemplate(true);
     const { error } = await supabase.from('lc_schedule_items').insert(newItems);
-    setLoading(false);
+    setLoadingTemplate(false);
 
     if (error) {
-      console.error('Template load error:', error);
+      console.error('Arborvitae template load error:', error);
       return;
     }
 
@@ -105,7 +135,7 @@ export default function SeasonalSchedule({ items, year, onToggleItem, onItemsCha
 
     setNewTitle('');
     setNewDesc('');
-    setNewCategory('general');
+    setNewCategory('watering');
     setShowAddForm(false);
     setSaving(false);
     onItemsChanged();
@@ -117,7 +147,12 @@ export default function SeasonalSchedule({ items, year, onToggleItem, onItemsCha
     onItemsChanged();
   }
 
-  // ── Filter items for selected month ──
+  function formatDate(d) {
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+  }
+
+  // Filter items for the selected month
   var monthItems = items.filter(function (item) {
     if (item.month_end) {
       return selectedMonth >= item.month_start && selectedMonth <= item.month_end;
@@ -128,25 +163,42 @@ export default function SeasonalSchedule({ items, year, onToggleItem, onItemsCha
   var activeItems = monthItems.filter(function (i) { return !i.done; });
   var completedItems = monthItems.filter(function (i) { return i.done; });
 
-  var totalMonth = monthItems.length;
-  var doneMonth = completedItems.length;
-
   var totalYear = items.length;
   var doneYear = items.filter(function (i) { return i.done; }).length;
   var pctYear = totalYear > 0 ? Math.round((doneYear / totalYear) * 100) : 0;
 
-  if (loading) {
-    return <div className="schedule-loading">Loading template...</div>;
-  }
+  var linkedItems = activeDetail
+    ? items.filter(function (i) { return i.gantt_key === activeDetail.key; })
+    : [];
 
   return (
-    <div className="seasonal-schedule">
-      <div className="schedule-top-bar">
-        <h3>Seasonal Schedule</h3>
-      </div>
+    <div className={styles.tab}>
+      <h1 className={styles.heading}>Arborvitae Care</h1>
+      <p className={styles.sub}>10 Giant Arborvitae (Thuja plicata) — year 2 establishment, central Indiana</p>
+
+      {/* Gantt */}
+      <div className={styles.sectionLabel}>Annual schedule — click any bar for details</div>
+      <GanttGrid
+        tasks={treeTasks}
+        completions={completions}
+        onBarClick={handleBarClick}
+        activeKey={activeDetail ? activeDetail.key : null}
+        panel="tree"
+      />
+
+      {activeDetail && (
+        <DetailPanel
+          activeKey={activeDetail.key}
+          title={activeDetail.title}
+          body={activeDetail.body}
+          linkedItems={linkedItems}
+          onToggleItem={onToggleItem}
+          onClose={function () { setActiveDetail(null); }}
+        />
+      )}
 
       {/* Year progress */}
-      <div className="year-progress">
+      <div className="year-progress" style={{ marginTop: '24px' }}>
         <div className="progress-track">
           <div className="progress-fill" style={{ width: pctYear + '%' }}></div>
         </div>
@@ -154,14 +206,15 @@ export default function SeasonalSchedule({ items, year, onToggleItem, onItemsCha
       </div>
 
       {/* Template loader */}
-      {items.length === 0 && (
+      {items.length === 0 && !loadingTemplate && (
         <div className="template-prompt">
-          <p>Start with a pre-built Indiana cool-season lawn care calendar?</p>
-          <button className="template-btn" onClick={loadTemplate} disabled={loading}>
-            {loading ? 'Loading...' : 'Load Indiana Template'}
+          <p>Start with a pre-built arborvitae care calendar for central Indiana?</p>
+          <button className="template-btn" onClick={loadTemplate} disabled={loadingTemplate}>
+            {loadingTemplate ? 'Loading...' : 'Load Arborvitae Template'}
           </button>
         </div>
       )}
+      {loadingTemplate && <p className="loading-msg">Loading template...</p>}
 
       {/* Month selector */}
       <div className="month-selector">
@@ -194,11 +247,13 @@ export default function SeasonalSchedule({ items, year, onToggleItem, onItemsCha
         })}
       </div>
 
-      {/* Month header + progress */}
+      {/* Month header */}
       <div className="month-header">
         <h4>{MONTH_NAMES[selectedMonth - 1]}</h4>
-        {totalMonth > 0 && (
-          <span className="month-progress">{doneMonth}/{totalMonth} done</span>
+        {monthItems.length > 0 && (
+          <span className="month-progress">
+            {completedItems.length}/{monthItems.length} done
+          </span>
         )}
       </div>
 
@@ -206,13 +261,12 @@ export default function SeasonalSchedule({ items, year, onToggleItem, onItemsCha
       {activeItems.length === 0 && completedItems.length === 0 && (
         <div className="month-empty">
           No tasks for {MONTH_NAMES[selectedMonth - 1]}.
-          {items.length === 0 && ' Load the Indiana template to get started.'}
+          {items.length === 0 && ' Load the arborvitae template to get started.'}
         </div>
       )}
 
       {activeItems.map(function (item) {
         var cat = CATEGORIES[item.category] || CATEGORIES.general;
-
         return (
           <div key={item.id} className="schedule-item">
             <div
@@ -242,7 +296,6 @@ export default function SeasonalSchedule({ items, year, onToggleItem, onItemsCha
         );
       })}
 
-      {/* Completed items */}
       {completedItems.length > 0 && (
         <>
           <div className="completed-divider">Completed</div>
@@ -314,12 +367,15 @@ export default function SeasonalSchedule({ items, year, onToggleItem, onItemsCha
         )}
       </div>
 
-      {/* Template button (if items exist but user wants to add template) */}
       {items.length > 0 && (
         <button className="template-btn-small" onClick={loadTemplate}>
           + Load missing template items
         </button>
       )}
+
+      {/* Season cards */}
+      <div className={styles.sectionLabel} style={{ marginTop: '2rem' }}>Key actions by season</div>
+      <SeasonCards seasons={treeSeasons} />
     </div>
   );
 }
