@@ -19,7 +19,7 @@ export default function Home() {
           <div className="app-card-icon">🌱</div>
           <h2>Lawn Care</h2>
           <p>Track zones, treatments, schedules, and seasonal plans.</p>
-          <span className="app-card-status status-building">Building</span>
+          <span className="app-card-status status-live">Live</span>
         </Link>
       </div>
     </div>
