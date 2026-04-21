@@ -36,7 +36,16 @@ export function useTasks() {
     const { data: authData } = await supabase.auth.getUser();
     if (!authData?.user) return { error: 'Not authenticated' };
 
-    const position = tasks.length;
+    const sectionTasks = tasksRef.current.filter(function(t) {
+      return t.tab === fields.tab && t.category === fields.category && !t.done;
+    });
+
+    if (sectionTasks.length > 0) {
+      await Promise.all(sectionTasks.map(function(t) {
+        return supabase.from('tasks').update({ position: (t.position ?? 0) + 1 }).eq('id', t.id);
+      }));
+    }
+
     const { error } = await supabase.from('tasks').insert([{
       user_id: authData.user.id,
       name: fields.name,
@@ -48,7 +57,7 @@ export function useTasks() {
       fwd_count: 0,
       done: false,
       priority: null,
-      position
+      position: 0
     }]);
 
     if (error) return { error: error.message };
