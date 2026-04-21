@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '../../shared/supabaseClient';
-import { CATEGORIES, MONTH_NAMES, INDIANA_TEMPLATE } from './scheduleTemplate';
+import { CATEGORIES, MONTH_NAMES } from './scheduleTemplate';
 
 // Props:
 //   items           - lc_schedule_items rows (owned by parent LawnCareApp)
@@ -14,65 +14,6 @@ export default function SeasonalSchedule({ items, year, onToggleItem, onItemsCha
   const [newDesc, setNewDesc] = useState('');
   const [newCategory, setNewCategory] = useState('general');
   const [saving, setSaving] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  async function loadTemplate() {
-    if (loading) return;
-    if (items.length > 0) {
-      if (!confirm('This will add the Indiana template items to your schedule. Items you already have won\'t be duplicated. Continue?')) {
-        return;
-      }
-    }
-
-    const { data: authData } = await supabase.auth.getUser();
-    if (!authData?.user) return;
-
-    // Deduplicate: prefer gantt_key match, fall back to title + month_start
-    const existingGanttKeys = new Set(
-      items.filter(function (i) { return i.gantt_key; })
-        .map(function (i) { return i.gantt_key; })
-    );
-    const existingTitleKeys = new Set(
-      items.map(function (i) { return i.title + ':' + i.month_start; })
-    );
-
-    const newItems = INDIANA_TEMPLATE
-      .filter(function (t) {
-        if (t.gantt_key) return !existingGanttKeys.has(t.gantt_key);
-        return !existingTitleKeys.has(t.title + ':' + t.month_start);
-      })
-      .map(function (t, idx) {
-        return {
-          user_id: authData.user.id,
-          title: t.title,
-          description: t.description,
-          category: t.category,
-          month_start: t.month_start,
-          month_end: t.month_end || null,
-          gantt_key: t.gantt_key || null,
-          is_template: true,
-          done: false,
-          year: year,
-          position: idx,
-        };
-      });
-
-    if (newItems.length === 0) {
-      alert('Template already loaded — all items exist.');
-      return;
-    }
-
-    setLoading(true);
-    const { error } = await supabase.from('lc_schedule_items').insert(newItems);
-    setLoading(false);
-
-    if (error) {
-      console.error('Template load error:', error);
-      return;
-    }
-
-    onItemsChanged();
-  }
 
   async function addCustomItem() {
     if (!newTitle.trim()) return;
@@ -135,10 +76,6 @@ export default function SeasonalSchedule({ items, year, onToggleItem, onItemsCha
   var doneYear = items.filter(function (i) { return i.done; }).length;
   var pctYear = totalYear > 0 ? Math.round((doneYear / totalYear) * 100) : 0;
 
-  if (loading) {
-    return <div className="schedule-loading">Loading template...</div>;
-  }
-
   return (
     <div className="seasonal-schedule">
       <div className="schedule-top-bar">
@@ -152,16 +89,6 @@ export default function SeasonalSchedule({ items, year, onToggleItem, onItemsCha
         </div>
         <span className="progress-text">{doneYear} of {totalYear} tasks complete this year</span>
       </div>
-
-      {/* Template loader */}
-      {items.length === 0 && (
-        <div className="template-prompt">
-          <p>Start with a pre-built Indiana cool-season lawn care calendar?</p>
-          <button className="template-btn" onClick={loadTemplate} disabled={loading}>
-            {loading ? 'Loading...' : 'Load Indiana Template'}
-          </button>
-        </div>
-      )}
 
       {/* Month selector */}
       <div className="month-selector">
@@ -202,11 +129,10 @@ export default function SeasonalSchedule({ items, year, onToggleItem, onItemsCha
         )}
       </div>
 
-      {/* Active items */}
+      {/* Empty state */}
       {activeItems.length === 0 && completedItems.length === 0 && (
         <div className="month-empty">
           No tasks for {MONTH_NAMES[selectedMonth - 1]}.
-          {items.length === 0 && ' Load the Indiana template to get started.'}
         </div>
       )}
 
@@ -313,13 +239,6 @@ export default function SeasonalSchedule({ items, year, onToggleItem, onItemsCha
           </button>
         )}
       </div>
-
-      {/* Template button (if items exist but user wants to add template) */}
-      {items.length > 0 && (
-        <button className="template-btn-small" onClick={loadTemplate}>
-          + Load missing template items
-        </button>
-      )}
     </div>
   );
 }
