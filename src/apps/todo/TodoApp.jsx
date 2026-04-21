@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import './TodoApp.css';
 import {
   DndContext,
   closestCenter,
@@ -28,7 +29,6 @@ import EditModal from './EditModal.jsx';
 import SectionManagerModal from './SectionManagerModal.jsx';
 import ProgressBar from './ProgressBar.jsx';
 import LoginScreen from './LoginScreen.jsx';
-import './TodoApp.css';
 
 const SESSION_TIMEOUT_MS = 12 * 60 * 60 * 1000;
 
@@ -93,7 +93,7 @@ export default function TodoApp() {
 function TodoAppInner() {
   const {
     tasks, tasksRef, setTasks, loading: tasksLoading, error,
-    addTask, updateTask, toggleTask, deleteTask, forwardTask, savePositions
+    addTask, updateTask, toggleTask, toggleSubtask, deleteTask, forwardTask, savePositions
   } = useTasks();
   const {
     sections, loading: sectionsLoading,
@@ -276,6 +276,7 @@ function TodoAppInner() {
                 onEdit={setEditingTask}
                 onDelete={deleteTask}
                 onForward={forwardTask}
+                onSubtaskToggle={toggleSubtask}
               />
             );
           })}

@@ -90,6 +90,46 @@ export function useTasks() {
     await supabase.from('tasks').delete().eq('id', id);
   }
 
+  async function toggleSubtask(taskId, lineIndex) {
+    const task = tasksRef.current.find(function(t) { return String(t.id) === String(taskId); });
+    if (!task) return;
+
+    const lines = (task.note || '').split('\n').map(function(line) {
+      let indent = 0;
+      let rest = line;
+      const spaceMatch = rest.match(/^( +)/);
+      if (spaceMatch) {
+        indent = Math.min(2, Math.floor(spaceMatch[1].length / 2));
+        rest = rest.slice(spaceMatch[1].length);
+      }
+      const pad = '  '.repeat(indent);
+      if (rest.startsWith('[ ] ')) return { raw: line, pad, prefix: '[ ] ', text: rest.slice(4), type: 'unchecked' };
+      if (rest.startsWith('[x] ') || rest.startsWith('[X] ')) return { raw: line, pad, prefix: '[x] ', text: rest.slice(4), type: 'checked' };
+      return { raw: line, pad, prefix: '', text: rest, type: 'other' };
+    });
+
+    if (!lines[lineIndex] || lines[lineIndex].type === 'other') return;
+
+    const toggled = lines[lineIndex].type === 'unchecked' ? '[x] ' : '[ ] ';
+    lines[lineIndex] = { ...lines[lineIndex], prefix: toggled };
+
+    const newNote = lines.map(function(l) {
+      if (l.type === 'other') return l.raw;
+      return l.pad + l.prefix + l.text;
+    }).join('\n');
+
+    setTasks(function(prev) {
+      return prev.map(function(t) {
+        return String(t.id) === String(taskId) ? { ...t, note: newNote } : t;
+      });
+    });
+    tasksRef.current = tasksRef.current.map(function(t) {
+      return String(t.id) === String(taskId) ? { ...t, note: newNote } : t;
+    });
+
+    await supabase.from('tasks').update({ note: newNote }).eq('id', taskId);
+  }
+
   async function forwardTask(id) {
     const task = tasksRef.current.find(function(t) { return String(t.id) === String(id); });
     if (!task) return;
@@ -160,5 +200,5 @@ export function useTasks() {
     loadTasks();
   }, []);
 
-  return { tasks, tasksRef, setTasks, loading, error, loadTasks, addTask, updateTask, toggleTask, deleteTask, forwardTask, savePositions };
+  return { tasks, tasksRef, setTasks, loading, error, loadTasks, addTask, updateTask, toggleTask, toggleSubtask, deleteTask, forwardTask, savePositions };
 }

@@ -26,7 +26,7 @@ function parseNote(raw) {
   });
 }
 
-function NoteDisplay({ note }) {
+function NoteDisplay({ note, taskId, onSubtaskToggle }) {
   const lines = parseNote(note);
   if (!lines.length || (lines.length === 1 && lines[0].text === '')) return null;
 
@@ -44,7 +44,13 @@ function NoteDisplay({ note }) {
         if (line.type === 'checkbox') {
           return (
             <div key={i} className={`${styles.noteLine} ${indentClass}`}>
-              <div className={`${styles.noteCb} ${line.checked ? styles.noteCbChecked : ''}`} />
+              <div
+                className={`${styles.noteCb} ${line.checked ? styles.noteCbChecked : ''}`}
+                onClick={function(e) {
+                  e.stopPropagation();
+                  if (onSubtaskToggle) onSubtaskToggle(taskId, i);
+                }}
+              />
               <span className={line.checked ? styles.noteCbTextChecked : ''}>
                 {escapeHtml(line.text)}
               </span>
@@ -61,7 +67,7 @@ function NoteDisplay({ note }) {
   );
 }
 
-export default function TaskCard({ task, onToggle, onEdit, onDelete, onForward }) {
+export default function TaskCard({ task, onToggle, onEdit, onDelete, onForward, onSubtaskToggle }) {
   const fwdCount = task.fwd_count || 0;
   const showForward = onForward && task.tab !== 'personal' && task.category !== 'Ongoing';
 
@@ -85,7 +91,7 @@ export default function TaskCard({ task, onToggle, onEdit, onDelete, onForward }
             <span className={styles.fwdBadge}>↪ Forwarded x{fwdCount}</span>
           )}
         </div>
-        <NoteDisplay note={task.note} />
+        <NoteDisplay note={task.note} taskId={task.id} onSubtaskToggle={onSubtaskToggle} />
         <div className={styles.taskMeta}>
           Added {task.origin_date || ''}
           {task.completed_date ? ` · Completed ${task.completed_date}` : ''}
