@@ -18,7 +18,7 @@ export default function SortableTaskCard({ task, onToggle, onEdit, onDelete, onF
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.3 : 1,
-    cursor: isDragging ? 'grabbing' : 'default',
+    cursor: isDragging ? 'grabbing' : 'grab',
   };
 
   function handlePointerDown(e) {
