@@ -200,7 +200,7 @@ function TodoAppInner() {
 
       {/* ── Header ── */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '8px' }}>
-        <div>
+        <div style={{ marginBottom: '24px' }}>
           <h2 style={{ fontFamily: 'DM Serif Display, serif', marginBottom: '8px' }}>
             {activeTab === 'work' ? 'Work' : 'Personal'}
           </h2>
@@ -211,20 +211,21 @@ function TodoAppInner() {
             showPill={activeTab === 'work'}
           />
           {activeTab === 'personal' && (
-            <button
-              onClick={function() { setShowSectionMgr(true); }}
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: '5px',
-                marginTop: '8px',
-                background: '#2e3236', color: '#e8e4dc',
-                fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem',
-                fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase',
-                padding: '5px 14px', borderRadius: '99px', border: 'none', cursor: 'pointer',
-                transition: 'background 0.2s'
-              }}
-            >
-              ✎ Manage Sections
-            </button>
+            <div style={{ marginTop: '8px' }}>
+              <button
+                onClick={function() { setShowSectionMgr(true); }}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '5px',
+                  background: '#2e3236', color: '#e8e4dc',
+                  fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem',
+                  fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase',
+                  padding: '5px 14px', borderRadius: '99px', border: 'none', cursor: 'pointer',
+                  transition: 'background 0.2s'
+                }}
+              >
+                ✎ Manage Sections
+              </button>
+            </div>
           )}
 
         </div>

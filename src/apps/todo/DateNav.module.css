@@ -2,7 +2,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 24px;
+  margin-bottom: 0;
 }
 
 /* ── Badge ───────────────────────────────────────────────────── */
