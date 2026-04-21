@@ -41,16 +41,27 @@ function NoteDisplay({ note, taskId, onSubtaskToggle }) {
             </div>
           );
         }
+        
         if (line.type === 'checkbox') {
           return (
             <div key={i} className={`${styles.noteLine} ${indentClass}`}>
-              <div
-                className={`${styles.noteCb} ${line.checked ? styles.noteCbChecked : ''}`}
-                onClick={function(e) {
-                  e.stopPropagation();
-                  if (onSubtaskToggle) onSubtaskToggle(taskId, i);
-                }}
-              />
+         <button
+              type="button"
+              className={`${styles.noteCb} ${line.checked ? styles.noteCbChecked : ''}`}
+               data-nocb="1"
+               style={{ cursor: 'pointer' }}
+           onClick={function(e) {
+                e.stopPropagation();
+          if (onSubtaskToggle) onSubtaskToggle(taskId, i);
+  }}
+>
+  {line.checked && (
+    <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+      <path d="M1 5L4.5 8.5L11 1" stroke="white" strokeWidth="2"
+            strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )}
+              </button>
               <span className={line.checked ? styles.noteCbTextChecked : ''}>
                 {escapeHtml(line.text)}
               </span>
@@ -113,7 +124,9 @@ export default function TaskCard({ task, onToggle, onEdit, onDelete, onForward, 
           </button>
         )}
         <button className={styles.deleteBtn} onClick={function() { onDelete(task.id); }} title="Remove">✕</button>
+      
       </div>
+      
     </div>
   );
 }

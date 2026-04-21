@@ -12,15 +12,28 @@ export default function SortableTaskCard({ task, onToggle, onEdit, onDelete, onF
     isDragging
   } = useSortable({ id: task.id });
 
+  const { style: _listenersStyle, ...listenerHandlers } = listeners || {};
+
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.3 : 1,
-    cursor: 'grab'
+    cursor: isDragging ? 'grabbing' : undefined,
   };
 
+  function handlePointerDown(e) {
+    if (e.target.closest('button') || e.target.closest('[data-nocb]')) return;
+    if (listenerHandlers.onPointerDown) listenerHandlers.onPointerDown(e);
+  }
+
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listenerHandlers}
+      onPointerDown={handlePointerDown}
+    >
       <TaskCard
         task={task}
         onToggle={onToggle}

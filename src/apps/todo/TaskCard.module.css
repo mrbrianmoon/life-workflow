@@ -81,7 +81,7 @@
 }
 
 .noteSub {
-  font-size: 0.9rem;
+  font-size: 1 rem;
   color: #1a1a1a;
   margin-top: 3px;
   font-weight: 300;
@@ -103,12 +103,22 @@
 
 .noteCb {
   flex-shrink: 0;
-  width: 14px;
-  height: 14px;
-  border: 1.5px solid #9fa5ab;
-  border-radius: 3px;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #9fa5ab;
+  border-radius: 6px;
   background: transparent;
-  margin-top: 3px;
+  margin-top: 1px;
+  cursor: pointer;
+  appearance: none;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Ensure draggable container cursor never overrides subtask checkbox */
+.noteLine .noteCb,
+.noteLine [data-nocb='1'] {
+  cursor: pointer !important;
 }
 
 .noteCbChecked {

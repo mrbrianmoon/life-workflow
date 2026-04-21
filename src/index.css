@@ -36,3 +36,7 @@ code {
 ul {
   list-style: none;
 }
+
+[data-nocb] {
+  cursor: pointer !important;
+}
