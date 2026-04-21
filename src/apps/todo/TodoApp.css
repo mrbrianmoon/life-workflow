@@ -60,3 +60,44 @@
   content: '● ';
   color: #3a6b4a;
 }
+
+/* ── Add Pill Button ───────────────────────────────── */
+
+.addPill {
+  width: 100%;
+  padding: 11px 20px;
+  border-radius: 99px;
+  border: 1.5px solid #9fa5ab;
+  background: #cdd0d4;
+  color: #555c63;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  margin-bottom: 20px;
+}
+
+.addPill:hover {
+  background: #3a6b4a;
+  color: #ffffff;
+  border-color: #3a6b4a;
+}
+
+.addPillPlus {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+/* ── Clock: hide on mobile ─────────────────────────── */
+
+@media (max-width: 640px) {
+  .clock-wrap {
+    display: none;
+  }
+}

@@ -28,6 +28,7 @@ import EditModal from './EditModal.jsx';
 import SectionManagerModal from './SectionManagerModal.jsx';
 import ProgressBar from './ProgressBar.jsx';
 import LoginScreen from './LoginScreen.jsx';
+import './TodoApp.css';
 
 const SESSION_TIMEOUT_MS = 12 * 60 * 60 * 1000;
 
@@ -247,25 +248,22 @@ function TodoAppInner({ onSignOut }) {
             ↩ Sign out
           </button>
         </div>
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', flexShrink: 0 }}>
+        <div className="clock-wrap">
           <ClockWidget />
-          <button
-            onClick={function() { setShowAddModal(true); }}
-            style={{
-              marginTop: '6px', width: '42px', height: '42px', borderRadius: '50%',
-              background: '#111', color: 'white', border: 'none', fontSize: '1.5rem',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.3)', flexShrink: 0
-            }}
-            title="Add item"
-          >
-            +
-          </button>
         </div>
       </div>
 
       {/* ── Progress Bar ── */}
       <ProgressBar plan={plan} />
+
+      {/* ── Add Pill Button ── */}
+      <button
+        className="addPill"
+        onClick={function() { setShowAddModal(true); }}
+      >
+        <span className="addPillPlus">+</span>
+        <span>Add</span>
+      </button>
 
       {plan.length === 0 && (
         <div style={{
@@ -345,6 +343,7 @@ function TodoAppInner({ onSignOut }) {
           onClose={function() { setShowSectionMgr(false); }}
         />
       )}
+
     </div>
   );
 }
