@@ -76,12 +76,6 @@ export default function TodoApp() {
     return function() { clearInterval(interval); };
   }, []);
 
-  async function handleSignOut() {
-    await supabase.auth.signOut();
-    localStorage.removeItem('tdw_login_at');
-    setAuthed(false);
-  }
-
   // ── Show nothing while checking session ─────────────────────
   if (authed === null) {
     return <div style={{ padding: '40px', textAlign: 'center', color: '#555c63' }}>Loading…</div>;
@@ -93,10 +87,10 @@ export default function TodoApp() {
   }
 
   // ── Authenticated app ────────────────────────────────────────
-  return <TodoAppInner onSignOut={handleSignOut} />;
+  return <TodoAppInner />;
 }
 
-function TodoAppInner({ onSignOut }) {
+function TodoAppInner() {
   const {
     tasks, tasksRef, setTasks, loading: tasksLoading, error,
     addTask, updateTask, toggleTask, deleteTask, forwardTask, savePositions
@@ -232,21 +226,7 @@ function TodoAppInner({ onSignOut }) {
               ✎ Manage Sections
             </button>
           )}
-          <button
-            onClick={onSignOut}
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: '5px',
-              marginTop: '8px', marginLeft: '8px',
-              background: 'transparent', color: '#555c63',
-              fontFamily: 'DM Sans, sans-serif', fontSize: '0.72rem',
-              fontWeight: 500, letterSpacing: '0.04em',
-              padding: '4px 10px', borderRadius: '99px',
-              border: '1px solid #9fa5ab', cursor: 'pointer',
-              transition: 'background 0.2s, color 0.2s, border-color 0.2s'
-            }}
-          >
-            ↩ Sign out
-          </button>
+
         </div>
         <div className="clock-wrap">
           <ClockWidget />
