@@ -1,5 +1,5 @@
 /* ── Global Reset & Base Styles ─────────────────────── */
-/* Titan Apps — shared across all routes                 */
+/* shared across all routes                 */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap');
 
@@ -7,6 +7,27 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+/* ── Design Tokens ──────────────────────────────────── */
+:root {
+  --bg:          #b8bcc0;
+  --card:        #cdd0d4;
+  --ink:         #1a1a1a;
+  --muted:       #555c63;
+  --accent:      #e05a2b;
+  --accent2:     #3a6b4a;
+  --border:      #9fa5ab;
+  --done-bg:     #c2ccc5;
+  --high-bg:     #e8bab0;
+  --high-border: #d4917f;
+  --high-label:  #b5432a;
+  --med-bg:      #e8ddb0;
+  --med-border:  #d4c97f;
+  --med-label:   #8a7a1e;
+  --low-bg:      #b0cce8;
+  --low-border:  #7fa8d4;
+  --low-label:   #2a5e8a;
 }
 
 body {
