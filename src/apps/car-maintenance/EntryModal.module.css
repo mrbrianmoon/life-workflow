@@ -1,0 +1,197 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26,18,8,0.45);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal {
+  background: var(--card);
+  border-radius: 18px;
+  padding: 28px 28px 24px;
+  width: 90%;
+  max-width: 460px;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.22);
+  animation: slideUp 0.25s ease;
+}
+
+.modal h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.45rem;
+  margin-bottom: 20px;
+  color: var(--ink);
+}
+
+.modal label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.modal input,
+.modal textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: #c5c8cc;
+  outline: none;
+  transition: border-color 0.2s;
+  margin-bottom: 14px;
+}
+
+.modal input:focus,
+.modal textarea:focus {
+  border-color: #2e3236;
+}
+
+.modal textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+/* ── Vehicle pills ── */
+.vehiclePills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.pill {
+  padding: 7px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: 99px;
+  background: transparent;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.pill:hover:not(.pillActive) {
+  border-color: #2e3236;
+  color: var(--ink);
+}
+
+.pillFusion.pillActive    { background: #9b1c1c; border-color: #9b1c1c; color: #e8e4dc; }
+.pillOdyssey.pillActive   { background: #e8e4dc; border-color: #c8c4bc; color: #1a1a1a; }
+.pillSilverado.pillActive { background: #1a1a1a; border-color: #1a1a1a; color: #e8e4dc; }
+.pillToro.pillActive      { background: #3a6b4a; border-color: #3a6b4a; color: #e8e4dc; }
+
+/* ── Two-column row ── */
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.row2 > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.dateInputs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.dateInputs input {
+  margin-bottom: 0;
+}
+
+.mmInput  { width: 60px; flex: none; }
+.yyyyInput { flex: 1; }
+
+/* ── Next service divider ── */
+.nextDivider {
+  border: none;
+  border-top: 1.5px dashed var(--border);
+  margin: 4px 0 18px;
+}
+
+.nextHeading {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nextHeading em {
+  font-size: 0.68rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--border);
+  font-style: italic;
+}
+
+/* ── Actions ── */
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.btnCancel {
+  flex: 1;
+  padding: 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  background: transparent;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnCancel:hover { background: #b8bcc0; }
+
+.btnSave {
+  flex: 2;
+  padding: 10px;
+  border: none;
+  border-radius: 9px;
+  background: #111;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnSave:hover { background: #333; }
+
+.error {
+  font-size: 0.8rem;
+  color: var(--accent);
+  margin-bottom: 10px;
+  min-height: 18px;
+}
+
+@keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }

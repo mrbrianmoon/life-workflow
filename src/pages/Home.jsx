@@ -21,6 +21,14 @@ export default function Home() {
           <p>Track zones, treatments, schedules, and seasonal plans.</p>
           <span className="app-card-status status-live">Live</span>
         </Link>
+        
+        <Link to="car-maintenance" className="app-card">
+          <div className="app-card-icon">🚗</div>
+          <h2>Car Maintenance</h2>
+          <p>Track vehicle maintenance across the fleet.</p>
+          <span className="app-card-status status-live">Live</span>
+        </Link>
+
       </div>
     </div>
   );

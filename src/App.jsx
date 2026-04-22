@@ -3,6 +3,7 @@ import Layout from './shared/Layout';
 import Home from './pages/Home';
 import TodoApp from './apps/todo/TodoApp';
 import LawnCareApp from './apps/lawn-care/LawnCareApp';
+import CarApp from './apps/car-maintenance/CarApp';
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="todo" element={<TodoApp />} />
           <Route path="lawn-care" element={<LawnCareApp />} />
+          <Route path="/car-maintenance" element={<CarApp />} />
         </Route>
       </Routes>
     </BrowserRouter>

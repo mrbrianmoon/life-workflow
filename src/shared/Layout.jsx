@@ -3,6 +3,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { supabase } from './supabaseClient.js';
 import './Layout.css';
 
+
 export default function Layout() {
   const [authed, setAuthed] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -41,6 +42,7 @@ export default function Layout() {
           <NavLink to="/lawn-care" className={function({ isActive }) { return isActive ? 'nav-link active' : 'nav-link'; }}>
             Lawn Care
           </NavLink>
+          <NavLink to="/car-maintenance">Car Maintenance</NavLink>
           {authed && (
             <button className="nav-signout" onClick={handleSignOut}>
               ↩ Sign out

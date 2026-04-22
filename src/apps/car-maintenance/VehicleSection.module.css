@@ -1,0 +1,169 @@
+.section {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 20px 16px;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.section.dropTarget {
+  border-color: #2e3236;
+  box-shadow: 0 0 0 3px rgba(46,50,54,0.15);
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.countTag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+
+.tagFusion    { background: #9b1c1c; color: #e8e4dc; }
+.tagOdyssey   { background: #e8e4dc; color: #1a1a1a; border: 1px solid #c8c4bc; }
+.tagSilverado { background: #1a1a1a; color: #e8e4dc; }
+.tagToro      { background: #3a6b4a; color: #e8e4dc; }
+
+.editBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.8rem;
+  padding: 3px 7px;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.editBtn:hover {
+  background: rgba(46,50,54,0.1);
+  color: var(--ink);
+}
+
+/* ── Empty state ── */
+.empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--border);
+  font-size: 0.82rem;
+  font-weight: 300;
+  border: 1.5px dashed var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  text-align: center;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.empty.dropHighlight {
+  border-color: #2e3236;
+  color: var(--muted);
+  background: rgba(46,50,54,0.04);
+}
+
+/* ── Entry card ── */
+.entry {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  animation: fadeUp 0.25s ease both;
+  position: relative;
+}
+
+.entry:hover .entryActions {
+  opacity: 1;
+}
+
+.entryTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.entryMeta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.entryMileage {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.entryDate {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--muted);
+  background: rgba(0,0,0,0.06);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.entryActions {
+  opacity: 0;
+  display: flex;
+  gap: 2px;
+  transition: opacity 0.2s;
+}
+
+.entryActBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.8rem;
+  padding: 2px 6px;
+  border-radius: 5px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.entryActBtn:hover {
+  color: var(--accent);
+  background: rgba(224,90,43,0.1);
+}
+
+.entryNote {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

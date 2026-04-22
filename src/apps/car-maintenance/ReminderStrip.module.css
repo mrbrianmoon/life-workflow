@@ -1,0 +1,159 @@
+.section {
+  margin-bottom: 20px;
+}
+
+.sectionLabel {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.strip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+}
+
+.empty {
+  color: var(--border);
+  font-size: 0.82rem;
+  font-weight: 300;
+  font-style: italic;
+  padding: 8px 0;
+}
+
+/* ── Reminder card ── */
+.card {
+  flex-shrink: 0;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px 10px;
+  min-width: 195px;
+  max-width: 225px;
+  cursor: grab;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.15s, opacity 0.2s;
+  user-select: none;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+.card:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+  transform: translateY(-2px);
+}
+
+.card.dragging {
+  opacity: 0.3;
+  cursor: grabbing;
+}
+
+.card:hover .deleteBtn {
+  opacity: 1;
+}
+
+/* ── Card content ── */
+.vehicleName {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.serviceName {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.dueRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.dueBadge {
+  font-size: 0.72rem;
+  font-weight: 500;
+  background: rgba(0,0,0,0.07);
+  padding: 2px 8px;
+  border-radius: 99px;
+  color: var(--muted);
+}
+
+/* ── Status badges ── */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.scheduled { background: rgba(0,0,0,0.07); color: var(--muted); }
+.comingUp  { background: #f5e6c0; color: #8a6800; }
+.overdue   { background: #f5c8bc; color: #8a2200; }
+
+/* ── Delete button ── */
+.deleteBtn {
+  position: absolute;
+  top: 8px; right: 8px;
+  opacity: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.75rem;
+  padding: 2px 5px;
+  border-radius: 4px;
+  transition: opacity 0.2s, color 0.15s, background 0.15s;
+}
+
+.deleteBtn:hover {
+  color: var(--accent);
+  background: rgba(224,90,43,0.1);
+}
+
+.dragHint {
+  font-size: 0.65rem;
+  color: var(--border);
+  font-style: italic;
+  margin-top: 5px;
+}
+
+/* ── Drag ghost ── */
+.ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: 999;
+  background: var(--card);
+  border: 1.5px solid #2e3236;
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.28);
+  transform: rotate(2deg) scale(1.03);
+  min-width: 195px;
+  max-width: 225px;
+  overflow: hidden;
+}
