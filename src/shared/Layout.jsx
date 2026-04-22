@@ -36,13 +36,19 @@ export default function Layout() {
           <NavLink to="/" end className={function({ isActive }) { return isActive ? 'nav-link active' : 'nav-link'; }}>
             Home
           </NavLink>
+
           <NavLink to="/todo" className={function({ isActive }) { return isActive ? 'nav-link active' : 'nav-link'; }}>
             To Do
           </NavLink>
+         
           <NavLink to="/lawn-care" className={function({ isActive }) { return isActive ? 'nav-link active' : 'nav-link'; }}>
             Lawn Care
           </NavLink>
-          <NavLink to="/car-maintenance">Car Maintenance</NavLink>
+
+          <NavLink to="/car-maintenance" className={function({ isActive }) { return isActive ? 'nav-link active' : 'nav-link'; }}>
+          Car Maintenance
+          </NavLink>
+          
           {authed && (
             <button className="nav-signout" onClick={handleSignOut}>
               ↩ Sign out
@@ -77,6 +83,12 @@ export default function Layout() {
             onClick={function() { setMenuOpen(false); }}>
             Lawn Care
           </NavLink>
+
+          <NavLink to="/car-maintenance" className={function({ isActive }) { return isActive ? 'mobile-menu-link active' : 'mobile-menu-link'; }}
+            onClick={function() { setMenuOpen(false); }}>
+            Car Maintenance
+          </NavLink>
+
           {authed && (
             <button className="mobile-menu-signout" onClick={handleSignOut}>
               ↩ Sign out
