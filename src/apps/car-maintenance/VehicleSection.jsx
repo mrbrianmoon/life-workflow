@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styles from './VehicleSection.module.css';
 import { VEHICLE_COLORS } from './carUtils';
 
@@ -8,10 +9,15 @@ const TAG_CLASS = {
   Toro:      styles.tagToro,
 };
 
-export default function VehicleSection({ vehicleKey, label, entries, isDropTarget, onDeleteEntry }) {
-  const color   = VEHICLE_COLORS[vehicleKey] || '#9fa5ab';
-  const count   = entries.length;
+export default function VehicleSection({ vehicleKey, label, entries, isDropTarget, onDeleteEntry, onEditEntry }) {
+  const [expanded, setExpanded] = useState(false);
+
+  const color    = VEHICLE_COLORS[vehicleKey] || '#9fa5ab';
+  const count    = entries.length;
   const tagClass = TAG_CLASS[vehicleKey] || '';
+
+  const visible   = expanded ? entries : entries.slice(0, 3);
+  const remainder = count - 3;
 
   return (
     <div
@@ -36,31 +42,52 @@ export default function VehicleSection({ vehicleKey, label, entries, isDropTarge
             {isDropTarget ? 'Drop here to log service' : 'No entries yet — hit Add Entry above'}
           </div>
         )
-        : entries.map(function (entry) {
-            const hasMileage = entry.mileage && entry.mileage !== '—' && entry.mileage !== '';
-            return (
-              <div className={styles.entry} key={entry.id}>
-                <div className={styles.entryTop}>
-                  <div className={styles.entryMeta}>
-                    {hasMileage && (
-                      <span className={styles.entryMileage}>{entry.mileage} mi</span>
-                    )}
-                    {entry.entry_date && (
-                      <span className={styles.entryDate}>{entry.entry_date}</span>
-                    )}
+        : (
+          <>
+            {visible.map(function (entry) {
+              const hasMileage = entry.mileage && entry.mileage !== '—' && entry.mileage !== '';
+              return (
+                <div className={styles.entry} key={entry.id}>
+                  <div className={styles.entryTop}>
+                    <div className={styles.entryMeta}>
+                      {hasMileage && (
+                        <span className={styles.entryMileage}>{entry.mileage} mi</span>
+                      )}
+                      {entry.entry_date && (
+                        <span className={styles.entryDate}>{entry.entry_date}</span>
+                      )}
+                    </div>
+                    <div className={styles.entryActions}>
+                      <button
+                        className={styles.entryActBtn}
+                        title="Edit"
+                        onClick={function () { onEditEntry(entry, vehicleKey); }}
+                      >✎</button>
+                      <button
+                        className={styles.entryActBtn}
+                        title="Delete"
+                        onClick={function () { onDeleteEntry(entry.id, vehicleKey); }}
+                      >✕</button>
+                    </div>
                   </div>
-                  <div className={styles.entryActions}>
-                    <button
-                      className={styles.entryActBtn}
-                      title="Delete"
-                      onClick={function () { onDeleteEntry(entry.id, vehicleKey); }}
-                    >✕</button>
-                  </div>
+                  {entry.note && <div className={styles.entryNote}>{entry.note}</div>}
                 </div>
-                {entry.note && <div className={styles.entryNote}>{entry.note}</div>}
-              </div>
-            );
-          })
+              );
+            })}
+
+            {/* Expand / collapse toggle */}
+            {count > 3 && (
+              <button
+                className={styles.expandBtn}
+                onClick={function () { setExpanded(function (prev) { return !prev; }); }}
+              >
+                {expanded
+                  ? '▲ Show less'
+                  : '▼ ' + remainder + ' more ' + (remainder === 1 ? 'entry' : 'entries')}
+              </button>
+            )}
+          </>
+        )
       }
     </div>
   );

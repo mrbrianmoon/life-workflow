@@ -44,8 +44,7 @@ export default function CarApp() {
 
 // ── Inner app (only mounts when authenticated) ────────────────────
 function CarAppInner() {
-  const [userId, setUserId] = useState(null);
-
+  const [editingEntry, setEditingEntry] = useState(null);
   useEffect(function () {
     supabase.auth.getUser().then(function ({ data: { user } }) {
       if (user) setUserId(user.id);
@@ -80,6 +79,15 @@ function CarAppInner() {
     setStatusMsg(msg);
     setIsError(!!err);
     setTimeout(function () { setStatusMsg(''); }, 2500);
+  }
+
+  function handleEditEntry(entry, vehicleKey) {
+    setModalVehicle(entry.vehicle || vehicleKey);
+    setModalNote(entry.note || '');
+    setIsLogService(false);
+    setFromRemId(null);
+    setEditingEntry(entry);
+    setShowModal(true);
   }
 
   // ── Open modal from Add button ─────────────────────────────────
@@ -201,6 +209,7 @@ function CarAppInner() {
               entries={entries[key] || []}
               isDropTarget={dropTarget === key}
               onDeleteEntry={handleDeleteEntry}
+              onEditEntry={handleEditEntry}
             />
           );
         })}
@@ -213,7 +222,7 @@ function CarAppInner() {
           initialNote={modalNote}
           isLogService={isLogService}
           onSave={handleSave}
-          onClose={function () { setShowModal(false); setFromRemId(null); }}
+          onClose={function () { setShowModal(false); setFromRemId(null); setEditingEntry(null); }}
         />
       )}
     </div>

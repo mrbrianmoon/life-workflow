@@ -82,6 +82,7 @@ export default function EntryModal({ initialVehicle, initialNote, isLogService, 
               type="text"
               placeholder="e.g. 89,000"
               value={mileage}
+              autofocus
               onChange={function (e) { setMileage(e.target.value); }}
             />
           </div>
