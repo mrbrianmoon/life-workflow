@@ -105,12 +105,14 @@
 .row2 > div {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .dateInputs {
   display: flex;
   gap: 6px;
   margin-bottom: 14px;
+  width: 100%;
 }
 
 .dateInputs input {
@@ -119,6 +121,9 @@
 
 .mmInput  { width: 60px; flex: none; }
 .yyyyInput { flex: 1; }
+
+.mmInput  { width: 64px; flex: none; min-width: 0; }
+.yyyyInput { flex: 1; min-width: 0; }
 
 /* ── Next service divider ── */
 .nextDivider {
