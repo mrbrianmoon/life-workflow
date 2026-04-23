@@ -101,3 +101,12 @@
     display: none;
   }
 }
+
+/* ── Prevent viewport collapse on zoom-out (Personal tab) ─── */
+/* Without this, the Personal tab has no wide element to anchor
+   against, so pinch-zoom-out leaves the page stuck at a small
+   width instead of snapping back to fill the screen. */
+   .todoWrapper {
+    min-width: 100vw;
+  }
+  

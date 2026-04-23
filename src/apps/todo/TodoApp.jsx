@@ -194,9 +194,9 @@ function TodoAppInner() {
     .filter(function(item) { return item.type === 'task'; })
     .map(function(item) { return item.row.id; });
 
-  return (
-    <div style={{ maxWidth: '640px', margin: '0 auto', padding: '40px 24px' }}>
-      <TabBar activeTab={activeTab} onSwitch={setActiveTab} />
+    return (
+      <div className="todoWrapper" style={{ maxWidth: '640px', margin: '0 auto', padding: '40px 24px' }}>
+        <TabBar activeTab={activeTab} onSwitch={setActiveTab} />
 
       {/* ── Header ── */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '8px' }}>
@@ -229,6 +229,7 @@ function TodoAppInner() {
           )}
 
         </div>
+    
         <div className="clock-wrap">
           <ClockWidget />
         </div>
