@@ -46,7 +46,7 @@ export default function CarApp() {
 function CarAppInner() {
   const [userId,       setUserId]       = useState(null);
   const [editingEntry, setEditingEntry] = useState(null);
-  
+
   useEffect(function () {
     supabase.auth.getUser().then(function ({ data: { user } }) {
       if (user) setUserId(user.id);
@@ -133,8 +133,20 @@ function CarAppInner() {
 
     if (editingEntry) {
       const { error } = await updateEntry(editingEntry.id, editingEntry.vehicle, mileage, entryDate, note);
-      if (error) showStatus('Failed to update entry', true);
-      else showStatus('✓ Updated');
+      if (error) { showStatus('Failed to update entry', true); return; }
+
+      if (reminderData) {
+        const { error: remErr } = await addReminder(
+          editingEntry.vehicle,
+          reminderData.service,
+          reminderData.due_mileage,
+          reminderData.due_month,
+          reminderData.due_year
+        );
+        if (remErr) showStatus('Updated but reminder failed', true);
+      }
+
+      showStatus('✓ Updated');
       setEditingEntry(null);
       return;
     }
