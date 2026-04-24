@@ -44,7 +44,9 @@ export default function CarApp() {
 
 // ── Inner app (only mounts when authenticated) ────────────────────
 function CarAppInner() {
+  const [userId,       setUserId]       = useState(null);
   const [editingEntry, setEditingEntry] = useState(null);
+  
   useEffect(function () {
     supabase.auth.getUser().then(function ({ data: { user } }) {
       if (user) setUserId(user.id);
