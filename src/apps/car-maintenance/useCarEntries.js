@@ -60,6 +60,31 @@ export function useCarEntries(userId) {
     return { data };
   }
 
+  async function updateEntry(id, vehicle, mileage, entryDate, note) {
+    // Optimistic update
+    setEntries(function (prev) {
+      return {
+        ...prev,
+        [vehicle]: prev[vehicle].map(function (e) {
+          return e.id === id
+            ? { ...e, mileage: mileage || '', entry_date: entryDate || '', note: note || '' }
+            : e;
+        })
+      };
+    });
+
+    const { error } = await supabase
+      .from('cm_entries')
+      .update({ mileage: mileage || '', entry_date: entryDate || '', note: note || '' })
+      .eq('id', id);
+
+    if (error) {
+      loadEntries();
+      return { error: error.message };
+    }
+    return {};
+  }
+
   async function deleteEntry(id, vehicle) {
     // Optimistic remove
     setEntries(function (prev) {
@@ -75,5 +100,5 @@ export function useCarEntries(userId) {
     return {};
   }
 
-  return { entries, loading, error, loadEntries, addEntry, deleteEntry };
+  return { entries, loading, error, loadEntries, addEntry, updateEntry, deleteEntry };
 }

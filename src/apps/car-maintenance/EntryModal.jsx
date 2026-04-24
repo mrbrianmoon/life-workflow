@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styles from './EntryModal.module.css';
 import { VEHICLES } from './carUtils';
 
-export default function EntryModal({ initialVehicle, initialNote, isLogService, onSave, onClose }) {
+export default function EntryModal({ initialVehicle, initialNote, initialMileage, initialMonth, initialYear, isLogService, onSave, onClose }) {
   const [vehicle,     setVehicle]     = useState(initialVehicle || 'Fusion');
   const [mileage,     setMileage]     = useState('');
   const [month,       setMonth]       = useState(String(new Date().getMonth() + 1).padStart(2, '0'));
@@ -18,7 +18,10 @@ export default function EntryModal({ initialVehicle, initialNote, isLogService, 
   useEffect(function () {
     if (initialVehicle) setVehicle(initialVehicle);
     if (initialNote)    setNote(initialNote);
-  }, [initialVehicle, initialNote]);
+    if (initialMileage) setMileage(initialMileage);
+    if (initialMonth)   setMonth(initialMonth);
+    if (initialYear)    setYear(initialYear);
+  }, [initialVehicle, initialNote, initialMileage, initialMonth, initialYear]);
 
   function getPillClass(key) {
     const base = styles.pill;

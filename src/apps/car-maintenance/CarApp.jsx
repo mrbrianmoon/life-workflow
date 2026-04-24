@@ -53,7 +53,7 @@ function CarAppInner() {
 
   const {
     entries, loading: entriesLoading, error: entriesError,
-    addEntry, deleteEntry,
+    addEntry, updateEntry, deleteEntry,
   } = useCarEntries(userId);
 
   const {
@@ -67,6 +67,9 @@ function CarAppInner() {
   const [modalNote,    setModalNote]    = useState('');
   const [isLogService, setIsLogService] = useState(false);
   const [fromRemId,    setFromRemId]    = useState(null);
+  const [modalMileage, setModalMileage] = useState('');
+  const [modalMonth,   setModalMonth]   = useState('');
+  const [modalYear,    setModalYear]    = useState('');
 
   // Drag drop highlight
   const [dropTarget, setDropTarget] = useState(null);
@@ -82,8 +85,12 @@ function CarAppInner() {
   }
 
   function handleEditEntry(entry, vehicleKey) {
+    const [entryMonth, entryYear] = (entry.entry_date || '').split('/');
     setModalVehicle(entry.vehicle || vehicleKey);
     setModalNote(entry.note || '');
+    setModalMileage(entry.mileage || '');
+    setModalMonth(entryMonth || '');
+    setModalYear(entryYear || '');
     setIsLogService(false);
     setFromRemId(null);
     setEditingEntry(entry);
@@ -121,10 +128,18 @@ function CarAppInner() {
     setShowModal(false);
 
     const { vehicle, mileage, entryDate, note } = entryData;
+
+    if (editingEntry) {
+      const { error } = await updateEntry(editingEntry.id, editingEntry.vehicle, mileage, entryDate, note);
+      if (error) showStatus('Failed to update entry', true);
+      else showStatus('✓ Updated');
+      setEditingEntry(null);
+      return;
+    }
+
     const { error } = await addEntry(vehicle, mileage, entryDate, note);
     if (error) { showStatus('Failed to save entry', true); return; }
 
-    // Create reminder if next service was filled in
     if (reminderData) {
       const { error: remErr } = await addReminder(
         vehicle,
@@ -136,7 +151,6 @@ function CarAppInner() {
       if (remErr) showStatus('Entry saved but reminder failed', true);
     }
 
-    // Dismiss the source reminder if this came from drag-to-log
     if (fromRemId !== null) {
       await deleteReminder(fromRemId);
       setFromRemId(null);
@@ -217,13 +231,16 @@ function CarAppInner() {
 
       {/* Modal */}
       {showModal && (
-        <EntryModal
-          initialVehicle={modalVehicle}
-          initialNote={modalNote}
-          isLogService={isLogService}
-          onSave={handleSave}
-          onClose={function () { setShowModal(false); setFromRemId(null); setEditingEntry(null); }}
-        />
+      <EntryModal
+      initialVehicle={modalVehicle}
+      initialNote={modalNote}
+      initialMileage={modalMileage}
+      initialMonth={modalMonth}
+      initialYear={modalYear}
+      isLogService={isLogService}
+      onSave={handleSave}
+      onClose={function () { setShowModal(false); setFromRemId(null); setEditingEntry(null); }}
+    />
       )}
     </div>
   );
