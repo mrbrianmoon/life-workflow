@@ -29,6 +29,13 @@ export default function Home() {
           <span className="app-card-status status-live">Live</span>
         </Link>
 
+        <Link to="/visitors" className="app-card">
+         <div className="app-card-icon">👋</div>
+         <h2>Visitors</h2>
+         <p>For hiring managers — my journey, what I've built, and what I'm looking for.</p>
+        <span className="app-card-status status-live">Live</span>
+        </Link>
+
       </div>
     </div>
   );
