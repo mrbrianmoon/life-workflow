@@ -6,14 +6,17 @@ import BuiltShowcase from './BuiltShowcase';
 import TechStack from './TechStack';
 import LessonsLearned from './LessonsLearned';
 import ContactSection from './ContactSection';
+import AIAndPeople from './AIAndPeople';
 import './Visitors.css';
 
 const SECTIONS = [
   { id: 'journey', label: 'Journey' },
+  { id: 'ai-people', label: 'AI & People' },
   { id: 'built', label: "What I've Built" },
   { id: 'stack', label: 'Stack' },
   { id: 'lessons', label: 'Lessons' },
-  { id: 'contact', label: 'Contact' }
+  { id: 'contact', label: 'Contact' },
+ 
 ];
 
 function Visitors() {
@@ -109,6 +112,10 @@ function Visitors() {
       <div className="visitors-sections">
         <section id="journey" className="visitors-section visitors-reveal">
           <JourneyTimeline />
+        </section>
+
+        <section id="ai-people" className="visitors-section visitors reveal">
+          <AIAndPeople />
         </section>
 
         <section id="built" className="visitors-section visitors-reveal">

@@ -4,7 +4,7 @@ function ContactSection() {
       <div className="visitors-section-eyebrow">Get in touch</div>
       <h2 className="visitors-section-title">Let's talk</h2>
       <p className="visitors-section-lead">
-        I'm actively pursuing software engineering roles. Best way to reach me is email — I read every message and reply within a day.
+        I'm actively pursuing entry-level/junior software engineering & full stack developer roles. Best way to reach me is email — I read every message and reply within a day.
       </p>
 
       <div className="visitors-contact-grid">
@@ -31,8 +31,8 @@ function ContactSection() {
 
       <div className="visitors-contact-note">
         <p>
-          <strong>What I'm looking for:</strong> a junior or associate software engineer role on a team
-          that ships real software to real users. I learn quickly, write code I understand, and bring
+          <strong>What I'm looking for:</strong> a junior or associate software engineer or full stack developer role on a team
+          that ships real software to real users. I love to build, fix, and build again.I learn quickly, write code I understand, and bring
           a decade of experience running projects that landed on time and under budget.
         </p>
       </div>

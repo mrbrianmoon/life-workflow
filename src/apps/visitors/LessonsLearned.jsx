@@ -56,6 +56,14 @@ const LESSONS = [
     cause: 'Vercel was treating client-side routes as real file paths. The single-page app needs all unknown paths rewritten to index.html.',
     fix: 'Added vercel.json with a rewrite rule: { "source": "/(.*)", "destination": "/" }.',
     takeaway: 'Single-page apps and the deploy platform have to agree on routing. Two-line config files solve this for good.'
+  },    
+    {
+    title: 'Cloudflare Tunnel, CORS, and Hosting',
+    where: 'Phase 7 - Cloudflare Tunnel',
+    symptom: 'Hosting Supabase Docker on my Mac Mini was great. I struggled to get Cloudflare Tunnels to work with Supabase correctly.',
+    cause: 'CORS headers were all pointing to the local machine, not the Cloudflare Tunnel.',
+    fix: 'Using Terminal, I was able to create a Cloudflare Tunnel for my local machine and then use a custom domain for my Supabase project. I also had to add the CORS headers to my Supabase project.',
+    takeaway: 'Cloudflare Tunnels are a great way to host Supabase Docker on your local machine, but they have a few quirks. Migration has its own set of challenges, but it\'s worth the effort.'
   }
 ];
 
