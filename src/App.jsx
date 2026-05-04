@@ -4,7 +4,7 @@ import Home from './pages/Home';
 import TodoApp from './apps/todo/TodoApp';
 import LawnCareApp from './apps/lawn-care/LawnCareApp';
 import CarApp from './apps/car-maintenance/CarApp';
-import Visitors from './apps/visitors/visitors';
+import Visitors from './apps/visitors/Visitors';
 
 export default function App() {
   return (
