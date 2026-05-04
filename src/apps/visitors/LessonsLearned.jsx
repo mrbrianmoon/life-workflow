@@ -57,13 +57,13 @@ const LESSONS = [
     fix: 'Added vercel.json with a rewrite rule: { "source": "/(.*)", "destination": "/" }.',
     takeaway: 'Single-page apps and the deploy platform have to agree on routing. Two-line config files solve this for good.'
   },    
-    {
-    title: 'Cloudflare Tunnel, CORS, and Hosting',
-    where: 'Phase 7 - Cloudflare Tunnel',
-    symptom: 'Hosting Supabase Docker on my Mac Mini was great. I struggled to get Cloudflare Tunnels to work with Supabase correctly.',
-    cause: 'CORS headers were all pointing to the local machine, not the Cloudflare Tunnel.',
-    fix: 'Using Terminal, I was able to create a Cloudflare Tunnel for my local machine and then use a custom domain for my Supabase project. I also had to add the CORS headers to my Supabase project.',
-    takeaway: 'Cloudflare Tunnels are a great way to host Supabase Docker on your local machine, but they have a few quirks. Migration has its own set of challenges, but it\'s worth the effort.'
+  {
+    title: 'CORS errors after migrating to self-hosted Supabase',
+    where: 'In-house Server — Cloudflare Tunnel + Supabase',
+    symptom: 'After moving the backend off Supabase cloud onto a self-hosted Mac Mini behind Cloudflare Tunnel, the Vercel frontend could not talk to the database. Browser console showed CORS errors blocking every request.',
+    cause: 'Self-hosted Supabase routes API calls through Kong, which has its own CORS plugin. The default plugin allowed origins but not the specific request headers the Supabase JS client sends — apikey, x-client-info, accept-profile, content-profile, and a few others. Browser blocked every request before it even reached the database.',
+    fix: 'Edited every cors block in kong.yml to explicitly allow the Supabase client headers: apikey, x-client-info, x-supabase-api-version, accept-profile, content-profile, plus the standard Accept, Authorization, and Content-Type. Restarted the Kong container and the frontend connected immediately.',
+    takeaway: 'CORS errors look like a frontend problem but are almost always a server config problem. When self-hosting a service that has its own gateway, the gateway gets its own ruleset — defaults rarely match what real clients actually send.'
   }
 ];
 

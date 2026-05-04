@@ -46,7 +46,11 @@ export default function Layout() {
           </NavLink>
 
           <NavLink to="/car-maintenance" className={function({ isActive }) { return isActive ? 'nav-link active' : 'nav-link'; }}>
-          Car Maintenance
+            Car Maintenance
+          </NavLink>
+
+          <NavLink to="/visitors" className={function({ isActive }) { return isActive ? 'nav-link acitive' : 'nav-link';}}>
+            Visitors
           </NavLink>
           
           {authed && (
