@@ -59,7 +59,7 @@ const LESSONS = [
   },    
   {
     title: 'CORS errors after migrating to self-hosted Supabase',
-    where: 'In-house Server — Cloudflare Tunnel + Supabase',
+    where: 'In-house Server — Cloudflare Tunnel + Supabase - Phase 7',
     symptom: 'After moving the backend off Supabase cloud onto a self-hosted Mac Mini behind Cloudflare Tunnel, the Vercel frontend could not talk to the database. Browser console showed CORS errors blocking every request.',
     cause: 'Self-hosted Supabase routes API calls through Kong, which has its own CORS plugin. The default plugin allowed origins but not the specific request headers the Supabase JS client sends — apikey, x-client-info, accept-profile, content-profile, and a few others. Browser blocked every request before it even reached the database.',
     fix: 'Edited every cors block in kong.yml to explicitly allow the Supabase client headers: apikey, x-client-info, x-supabase-api-version, accept-profile, content-profile, plus the standard Accept, Authorization, and Content-Type. Restarted the Kong container and the frontend connected immediately.',
