@@ -49,6 +49,10 @@ export default function Layout() {
             Car Maintenance
           </NavLink>
 
+          <NavLink to="/workout" className={function({ isActive }) { return isActive ? 'nav-link active' : 'nav-link'; }}>
+            Lift Log
+          </NavLink>
+
           <NavLink to="/visitors" className={function({ isActive }) { return isActive ? 'nav-link acitive' : 'nav-link';}}>
             Visitors
           </NavLink>
@@ -91,6 +95,11 @@ export default function Layout() {
           <NavLink to="/car-maintenance" className={function({ isActive }) { return isActive ? 'mobile-menu-link active' : 'mobile-menu-link'; }}
             onClick={function() { setMenuOpen(false); }}>
             Car Maintenance
+          </NavLink>
+
+          <NavLink to="/workout" className={function({ isActive }) { return isActive ? 'mobile-menu-link active' : 'mobile-menu-link'; }}
+            onClick={function() { setMenuOpen(false); }}>
+            Lift Log
           </NavLink>
 
           {authed && (
