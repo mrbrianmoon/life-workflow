@@ -23,7 +23,7 @@
   width: 32px;
   height: 32px;
   border: 3px solid var(--border);
-  border-top-color: var(--accent);
+  border-top-color: var(--accent2);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -55,7 +55,7 @@
   min-height: 22px;
   font-size: 13px;
   font-weight: 500;
-  color: var(--accent);
+  color: var(--accent2);
   margin-bottom: 14px;
 }
 
@@ -83,7 +83,7 @@
 }
 
 .input:focus {
-  border-color: var(--accent);
+  border-color: var(--accent2);
 }
 
 .addBtn {
@@ -91,7 +91,7 @@
   align-items: center;
   gap: 6px;
   padding: 11px 16px;
-  background: var(--accent);
+  background: var(--accent2);
   color: #fff;
   border: none;
   border-radius: 9px;
@@ -134,9 +134,9 @@
 
 .volBadge {
   font-size: 13px;
-  color: var(--accent);
+  color: var(--accent2);
   font-weight: 600;
-  background: var(--high-bg);
+  background: rgba(58, 107, 74, 0.15);
   padding: 3px 9px;
   border-radius: 20px;
 }
@@ -193,7 +193,7 @@
 }
 
 .smallInput:focus {
-  border-color: var(--accent);
+  border-color: var(--accent2);
 }
 
 /* ── Set chips ───────────────────────────────────────────────────── */
@@ -231,7 +231,7 @@
 
 .setChipDone {
   border: none;
-  background: var(--accent);
+  background: var(--accent2);
   color: #fff;
 }
 
@@ -249,7 +249,7 @@
 }
 
 .setCountDone {
-  color: var(--accent);
+  color: var(--accent2);
 }
 
 .restNote {
@@ -272,8 +272,8 @@
   gap: 5px;
   padding: 8px 11px;
   background: var(--bg);
-  color: var(--accent);
-  border: 1.5px solid var(--high-border);
+  color: var(--accent2);
+  border: 1.5px solid var(--border);
   border-radius: 8px;
   font-size: 13px;
   font-weight: 600;
@@ -286,7 +286,7 @@
   align-items: center;
   gap: 5px;
   padding: 8px 11px;
-  background: var(--accent);
+  background: var(--accent2);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -337,7 +337,7 @@
 }
 
 .histVolume {
-  color: var(--accent);
+  color: var(--accent2);
 }
 
 .histDetail {
