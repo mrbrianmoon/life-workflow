@@ -1,0 +1,378 @@
+/* ── Lift Log ───────────────────────────────────────────────────── */
+/* Ported from the maroon prototype onto the Life Workflow palette.   */
+/* Every color derives from the tokens in index.css; the prototype's  */
+/* hardcoded #7a1228 maroon becomes --accent so the page reads as     */
+/* part of the suite.                                                  */
+
+.root {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+  color: var(--ink);
+}
+
+/* ── Loading ─────────────────────────────────────────────────────── */
+.loadingWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Header ──────────────────────────────────────────────────────── */
+.header {
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.header p {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+/* ── Status bar ──────────────────────────────────────────────────── */
+.statusBar {
+  min-height: 22px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.statusBar.error {
+  color: var(--high-label);
+}
+
+/* ── Add-routine bar ─────────────────────────────────────────────── */
+.addBar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.input {
+  flex: 1;
+  padding: 11px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  font-size: 15px;
+  font-family: inherit;
+  background: var(--card);
+  color: var(--ink);
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--accent);
+}
+
+.addBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 16px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ── Routine card ────────────────────────────────────────────────── */
+.card {
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  background: var(--card);
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  cursor: pointer;
+}
+
+.rName {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.volBadge {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 600;
+  background: var(--high-bg);
+  padding: 3px 9px;
+  border-radius: 20px;
+}
+
+.doneCount {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.body {
+  padding: 4px 16px 16px;
+}
+
+/* ── Exercise rows ───────────────────────────────────────────────── */
+.exHead,
+.exRow {
+  display: grid;
+  grid-template-columns: 1fr 64px 50px 50px 60px 28px;
+  gap: 8px;
+  align-items: center;
+}
+
+.exHead {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 6px 0;
+}
+
+.exRow {
+  padding: 9px 0 5px;
+}
+
+.exBlock {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.smallInput {
+  width: 100%;
+  padding: 7px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--bg);
+  color: var(--ink);
+  box-sizing: border-box;
+  outline: none;
+}
+
+.smallInput:focus {
+  border-color: var(--accent);
+}
+
+/* ── Set chips ───────────────────────────────────────────────────── */
+.setRow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  padding: 2px 0 6px;
+}
+
+.setLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-right: 2px;
+}
+
+.setChip {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1.6px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.setChipDone {
+  border: none;
+  background: var(--accent);
+  color: #fff;
+}
+
+.setHint {
+  font-size: 12px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.setCount {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-left: 4px;
+}
+
+.setCountDone {
+  color: var(--accent);
+}
+
+.restNote {
+  font-size: 12px;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+/* ── Footer actions ──────────────────────────────────────────────── */
+.foot {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 11px;
+  background: var(--bg);
+  color: var(--accent);
+  border: 1.5px solid var(--high-border);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.primaryGhost {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 11px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.iconBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  display: flex;
+  padding: 2px;
+}
+
+/* ── History panel ───────────────────────────────────────────────── */
+.histPanel {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1.5px dashed var(--border);
+}
+
+.histTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+
+.histRow {
+  padding: 8px 10px;
+  background: var(--bg);
+  border-radius: 8px;
+  margin-bottom: 6px;
+}
+
+.histTop {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.histVolume {
+  color: var(--accent);
+}
+
+.histDetail {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.histDelete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 0;
+  margin-left: 8px;
+}
+
+/* ── Empty state ─────────────────────────────────────────────────── */
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 40px 0;
+  font-size: 15px;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .exHead,
+  .exRow {
+    grid-template-columns: 1fr 52px 42px 42px 48px 24px;
+    gap: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation: none; }
+}

@@ -5,6 +5,7 @@ import TodoApp from './apps/todo/TodoApp';
 import LawnCareApp from './apps/lawn-care/LawnCareApp';
 import CarApp from './apps/car-maintenance/CarApp';
 import Visitors from './apps/visitors/Visitors';
+import WorkoutApp from './apps/workout/WorkoutApp';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="lawn-care" element={<LawnCareApp />} />
           <Route path="/car-maintenance" element={<CarApp />} />
           <Route path="visitors" element={<Visitors />} />
+          <Route path="workout" element={<WorkoutApp />} />
         </Route>
       </Routes>
     </BrowserRouter>

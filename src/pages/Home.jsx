@@ -29,6 +29,13 @@ export default function Home() {
           <span className="app-card-status status-live">Live</span>
         </Link>
 
+        <Link to="/workout" className="app-card">
+          <div className="app-card-icon">🏋️</div>
+          <h2>Lift Log</h2>
+          <p>Build routines, track sets, and log your sessions.</p>
+          <span className="app-card-status status-live">Live</span>
+        </Link>
+
         <Link to="/visitors" className="app-card">
          <div className="app-card-icon">👋</div>
          <h2>Visitors</h2>
